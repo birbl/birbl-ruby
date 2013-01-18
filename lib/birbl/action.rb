@@ -5,38 +5,47 @@
 module Birbl
   class Action
     class << self
-       attr_accessor :use_sandbox, :key, :base_url, :dev_url
-     end
+      attr_accessor :instance
 
-    @use_sandbox = false
-    @key = ''
-    @base_url = 'https://api.birbl.com'
-    @dev_url = 'https://dev-api.birbl.com'
+      @instance = nil
+    end
 
-    def Action.get(uri, data = [])
+    attr_accessor :use_sandbox, :base_url, :dev_url
+    attr_reader   :key
+
+    def initialize(key)
+      self.class.instance = self if self.class.instance.nil?
+      @key = key
+      @use_sandbox = false
+      @base_url = 'https://api.birbl.com'
+      @dev_url = 'https://dev-api.birbl.com'
+    end
+
+    def get(uri, data = [])
       query_server(uri, data, 'get')
     end
 
-    def Action.post(uri, data = [])
+    def post(uri, data = [])
       query_server(uri, data, 'post')
     end
 
-    def Action.put(uri, data = [])
+    def put(uri, data = [])
       query_server(uri, data, 'put')
     end
 
-    def Action.delete(uri, data = [])
+    def delete(uri, data = [])
       query_server(uri, data, 'delete')
     end
 
-    def Action.url
+    def url
       @use_sandbox ? @dev_url : @base_url
     end
 
     private
 
-    def Action.query_server(uri, data = [], method = 'get')
+    def query_server(uri, data = [], method = 'get')
       [{}]
     end
   end
 end
+
