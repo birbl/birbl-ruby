@@ -1,48 +1,69 @@
 require 'birbl'
 
-describe Birbl do
+describe Birbl::Action do
+  context 'without initialization' do
+    context '.instance' do
+      it 'raises an error'
+    end
 
-  class DummyClass
+    context '.new' do
+      it 'takes one parameter'
+    end
   end
 
-  before(:each) do
-    @dummy = DummyClass.new
-    @dummy.extend Birbl
-  end
+  context 'with initialization' do
+    subject { Birbl::Action.new('the_key') }
 
-  describe Action do
-    it "allows for setting the timeout value" do
-      lambda {Birbl::Action.timeout = true}.should_not raise_error
+    context '.instance' do
+      it 'returns the instance' do
+        subject # create it
+        expect(Birbl::Action.instance).to be(subject)
+      end
     end
 
-    it "uses a sandbox" do
-      Birbl::Action.use_sandbox = true
-      Birbl::Action.url.should == 'https://dev-api.birbl.com'
+    context 'attributes' do
+      [
+        [:use_sandbox, false],
+        [:base_url,    'https://api.birbl.com'],
+        [:dev_url,     'https://dev-api.birbl.com'],
+        [:timeout,     10],
+      ].each do |attribute, value|
+        it "has accessors for #{attribute}"
+        example "#{attribute} defaults to #{value}" do
+          expect(subject.send(attribute)).to eq(value)
+        end
+      end
     end
 
-    it "uses the live api" do
-      Birbl::Action.use_sandbox = false
-      Birbl::Action.url.should == 'https://api.birbl.com'
+    context '.url' do
+      context 'when not sandboxed' do
+        it 'returns production URL' do
+          expect(subject.url).to eq('https://api.birbl.com')
+        end
+      end
+
+      context 'when sandboxed' do
+        it 'returns staging URL' do
+          subject.use_sandbox = true
+
+          expect(subject.url).to eq('https://dev-api.birbl.com')
+        end
+      end
     end
 
-    it "sets dev url" do
-      lambda {Birbl::Action.dev_url = 'http://localhost:8080'}.should_not raise_error
-    end
+    context '.get' do
+      before do
+        #Foobar.stub(:get).with('https://...').and_return([a, b, c])
+      end
 
-    it "sets live url" do
-      lambda {Birbl::Action.base_url = 'http://localhost:8080'}.should_not raise_error
-    end
+      it 'proxies to foobar' do
+        #Foobar.should_receive(:get).with('https://...').and_return([a, b, c])
+        subject.get('partners')
+      end
 
-    it "uses an api key" do
-      lambda {Birbl::Action.api_key = '1234567890'}.should_not raise_error
-    end
-
-    it "GETs some data from the API" do
-      lambda { Birbl::Action.get('partners') }.should_not raise_error
-    end
-
-    it "fails to GET some data from the API if the URI is wrong" do
-      lambda { Birbl::Action.get('wrong') }.should raise_error
+      it 'parses the JSON response'
+      it 'returns the parsed data'
+      it 'fails on error responses'
     end
   end
 end

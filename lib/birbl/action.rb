@@ -7,53 +7,44 @@ module Birbl
 
   class Action
     class << self
-       # Set this to use a sandbox version of the API for testing
-       # Default value is false
-       attr_accessor :use_sandbox
+      attr_accessor :instance
 
-       # Your API key, as provided by Birbl
-       attr_accessor :api_key
+      @instance = nil
+    end
 
-       # The timeout value for calls to the server, you may want to increase this if you are getting
-       # timeout errors.  Default value is 10
-       attr_accessor :timeout
+    attr_accessor :use_sandbox, :base_url, :dev_url, :timeout
+    attr_reader   :api_key
 
-       # The live API URL, usually you can leave this blank
-       attr_accessor :base_url
+    def initialize(api_key)
+      self.class.instance = self if self.class.instance.nil?
+      @api_key     = api_key
+      @use_sandbox = false
+      @base_url    = 'https://api.birbl.com'
+      @dev_url     = 'https://dev-api.birbl.com'
+      @timeout     = 10
+    end
 
-       # The sandbox API URL, usually you can leave this blank
-       attr_accessor :dev_url
-     end
-
-    @use_sandbox  = false
-    @api_key      = ''
-    @base_url     = 'https://api.birbl.com'
-    @dev_url      = 'https://dev-api.birbl.com'
-    @timeout      = 10
-
-    def Action.get(uri, data = [], pagination = nil)
+    def get(uri, data = [], pagination = nil)
       query_server(uri, data, 'get', pagination)
     end
 
-    def Action.post(uri, data = [], pagination = nil)
+    def post(uri, data = [], pagination = nil)
       query_server(uri, data, 'post', pagination)
     end
 
-    def Action.put(uri, data = [], pagination = nil)
+    def put(uri, data = [], pagination = nil)
       query_server(uri, data, 'put', pagination)
     end
 
-    def Action.delete(uri, data = [])
+    def delete(uri, data = [])
       query_server(uri, data, 'delete')
     end
 
-    def Action.url
+    def url
       @use_sandbox ? @dev_url : @base_url
     end
 
-    private
-
-    def Action.query_server(uri, data = [], method = 'get', pagination = nil)
+    def query_server(uri, data = [], method = 'get', pagination = nil)
       # prefix a '/' if not present on the uri
       uri = '/' + uri if uri !~ /^\//
 
