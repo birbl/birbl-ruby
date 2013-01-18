@@ -1,8 +1,15 @@
 require 'birbl'
 require 'yaml'
 
-Birbl::Action.api_key = 'development'
-Birbl::Action.dev_url = 'http://localhost:8080'
-Birbl::Action.use_sandbox = true
+action = Birbl::Action.new('development')
+action.dev_url = 'http://localhost:8080'
+action.use_sandbox = true
 
-puts Birbl::Action.get('partners/450/activities/1220').to_yaml
+partner = {
+  'description' => 'New partner description',
+  'email'       => 'partner3@example.com',
+  'name'        => 'Test partner from Ruby',
+  'website'     => 'www.url.com'
+}
+
+puts action.get('partners').to_yaml

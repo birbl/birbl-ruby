@@ -4,6 +4,7 @@
 
 module Birbl
   require 'json'
+  require 'rest_client'
 
   class Action
     class << self
@@ -44,28 +45,29 @@ module Birbl
       @use_sandbox ? @dev_url : @base_url
     end
 
+    def json_data(data)
+      "data=" + JSON.generate(data)
+    end
+
     def query_server(uri, data = [], method = 'get', pagination = nil)
       # prefix a '/' if not present on the uri
       uri = '/' + uri if uri !~ /^\//
 
-      sess = Patron::Session.new
-      sess.timeout = @timeout
-      sess.headers['User-Agent'] = 'birbl-ruby/1.0'
-      sess.headers['BIRBL_KEY'] = @api_key
-      sess.base_url = Action.url
-
       response = nil
-      if method == 'get'
-        response = sess.get(uri)
+      case method
+      when 'get'
+        response = RestClient.get(url + uri, :BIRBL_KEY => @api_key)
+      when 'post'
+        response = RestClient.post(url + uri, json_data(data), :BIRBL_KEY => @api_key)
+      when 'put'
+        response = RestClient.put(url + uri, json_data(data), :BIRBL_KEY => @api_key)
+      when 'delete'
+        response = RestClient.delete(url + uri, :BIRBL_KEY => @api_key)
       end
 
-      raise SecurityError, "The server says 'Unauthorized'.  Did you set your API key?" if response.status == 401
-      raise "#{ uri } doesn't go anywhere." if response.status == 404
-
       payload = JSON.parse(response.body)
-
       if payload.has_key?('error_type')
-        message = "Error type #{ payload['error_type'] } returned from the server when calling #{ uri }."
+        message = "Error type #{ payload['error_type'] } returned from the server when calling #{ uri }.  "
         payload['errors'].keys.each { |error|
           message += "#{ error }: #{ payload['errors'][error] }.  "
         }

@@ -8,10 +8,10 @@ This library allows for the use of the Birbl API in any Ruby program.
 
 == DEPENDENCIES
 
-Patron, for making curl calls
+RestClient, for making server queries
 JSON, for passing data
 
 == INSTALL
 
-gem install patron
+gem install rest-client
 gem install json
