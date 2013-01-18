@@ -11,6 +11,10 @@ describe Birbl do
   end
 
   describe Action do
+    it "allows for setting the timeout value" do
+      lambda {Birbl::Action.timeout = true}.should_not raise_error
+    end
+
     it "uses a sandbox" do
       Birbl::Action.use_sandbox = true
       Birbl::Action.url.should == 'https://dev-api.birbl.com'
@@ -22,44 +26,23 @@ describe Birbl do
     end
 
     it "sets dev url" do
-      url = 'http://localhost:8080'
-      Birbl::Action.dev_url = url
-      Birbl::Action.dev_url.should == url
+      lambda {Birbl::Action.dev_url = 'http://localhost:8080'}.should_not raise_error
     end
 
     it "sets live url" do
-      url = 'http://localhost:8080'
-      Birbl::Action.base_url = url
-      Birbl::Action.base_url.should == url
+      lambda {Birbl::Action.base_url = 'http://localhost:8080'}.should_not raise_error
     end
 
     it "uses an api key" do
-      key = '1234567890'
-
-      Birbl::Action.key = key
-      Birbl::Action.key.should == key
+      lambda {Birbl::Action.api_key = '1234567890'}.should_not raise_error
     end
 
-    it "GET some data from the API" do
-      Birbl::Action.get('partners').each { |partner|
-        partner.should be_an_instance_of(Hash)
-      }
+    it "GETs some data from the API" do
+      lambda { Birbl::Action.get('partners') }.should_not raise_error
     end
 
-    it "POST some data to the API" do
-      Birbl::Action.post('partners', [{:name => 'Test partner'}]).each { |partner|
-        partner.should be_an_instance_of(Hash)
-      }
-    end
-
-    it "PUT some data to the API" do
-      Birbl::Action.put('partners', [{:name => 'Test partner'}]).each { |partner|
-        partner.should be_an_instance_of(Hash)
-      }
-    end
-
-    it "DELETE some data from the API" do
-      Birbl::Action.delete('partners/1').should == true
+    it "fails to GET some data from the API if the URI is wrong" do
+      lambda { Birbl::Action.get('wrong') }.should raise_error
     end
   end
 end

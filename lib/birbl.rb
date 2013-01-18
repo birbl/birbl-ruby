@@ -3,6 +3,7 @@
 #
 
 module Birbl
+  require 'patron'
   require 'birbl/action'
   #require 'birbl/entity'
   #require 'birbl/partner'
