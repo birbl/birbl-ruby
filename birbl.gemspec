@@ -9,4 +9,6 @@ Gem::Specification.new do |s|
   s.files       = ["lib/birbl.rb"]
   s.homepage    =
     'http://rubygems.org/gems/birbl'
+  s.add_development_dependency 'rspec'
 end
+
