@@ -3,9 +3,7 @@
 #
 
 module Birbl
-  require 'birbl/action'
   #require 'birbl/entity'
-  #require 'birbl/partner'
   #require 'birbl/activity'
   #require 'birbl/occasion'
   #require 'birbl/reservation'
@@ -13,4 +11,6 @@ module Birbl
   #require 'birbl/user'
 end
 
-include Birbl
+require 'birbl/action'
+require 'birbl/partner'
+

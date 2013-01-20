@@ -9,6 +9,10 @@ Gem::Specification.new do |s|
   s.files       = ["lib/birbl.rb"]
   s.homepage    =
     'http://rubygems.org/gems/birbl'
+
+  s.add_runtime_dependency 'rest-client'
+  s.add_runtime_dependency 'activemodel'
+
   s.add_development_dependency 'rspec'
 end
 

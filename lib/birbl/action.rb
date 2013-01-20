@@ -1,11 +1,10 @@
 ###
 # Handle interactions with the server.
 #
+require 'json'
+require 'rest_client'
 
 module Birbl
-  require 'json'
-  require 'rest_client'
-
   class Action
     class << self
       attr_accessor :instance
