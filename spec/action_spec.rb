@@ -53,17 +53,35 @@ describe Birbl::Action do
 
     context '.get' do
       before do
-        #Foobar.stub(:get).with('https://...').and_return([a, b, c])
+        good_response = mock('response')
+        good_response.stub(:body).and_return(JSON.generate({
+          data: [{
+            name:  "Dummy Partner",
+            email: "partner@example.com"
+          }]
+        }))
+
+        error_response = mock('response')
+        error_response.stub(:body).and_return(JSON.generate({
+          data: [],
+          error_type: 'Dummy error',
+          error_message: 'Dummy error message'
+        }))
+
+        RestClient.stub(:get).with('https://api.birbl.com/partners', :BIRBL_KEY => 'the_key').and_return(good_response, error_response)
       end
 
       it 'proxies to foobar' do
-        #Foobar.should_receive(:get).with('https://...').and_return([a, b, c])
-        subject.get('partners')
+        RestClient.should_receive(:get).with('https://api.birbl.com/partners', :BIRBL_KEY => 'the_key')
       end
 
-      it 'parses the JSON response'
-      it 'returns the parsed data'
-      it 'fails on error responses'
+      it 'returns parsed JSON data' do
+        expect(subject.get('partners')).to eq([{"name" => "Dummy Partner", "email" => "partner@example.com"}])
+      end
+
+      it 'fails on error responses' do
+        expect(subject.get('partners')).to raise_error
+      end
     end
   end
 end

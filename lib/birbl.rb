@@ -4,9 +4,9 @@
 
 module Birbl
   require 'birbl/action'
-  #require 'birbl/entity'
-  #require 'birbl/partner'
-  #require 'birbl/activity'
+  require 'birbl/resource'
+  require 'birbl/partner'
+  require 'birbl/activity'
   #require 'birbl/occasion'
   #require 'birbl/reservation'
   #require 'birbl/participation'
