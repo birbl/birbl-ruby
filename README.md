@@ -9,9 +9,18 @@ This library allows for the use of the Birbl API in any Ruby program.
 == DEPENDENCIES
 
 RestClient, for making server queries
-JSON, for passing data
+JSON, for parsing data
 
 == INSTALL
 
-gem install rest-client
-gem install json
+```shell
+$ bundle
+```
+
+== Tests
+
+Run tests:
+```shell
+$ rake
+```
+
