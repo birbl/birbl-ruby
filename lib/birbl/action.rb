@@ -7,16 +7,27 @@ require 'rest_client'
 module Birbl
   class Action
     class << self
-      attr_accessor :instance
-
       @instance = nil
+
+      def instance=(instance)
+        @instance = instance
+      end
+
+      def instance
+        raise 'No instance has been initialized' unless instance?
+        @instance
+      end
+
+      def instance?
+        not @instance.nil?
+      end
     end
 
     attr_accessor :use_sandbox, :base_url, :dev_url, :timeout
     attr_reader   :api_key
 
     def initialize(api_key)
-      self.class.instance = self if self.class.instance.nil?
+      self.class.instance = self unless self.class.instance?
       @api_key     = api_key
       @use_sandbox = false
       @base_url    = 'https://api.birbl.com'
@@ -66,15 +77,22 @@ module Birbl
 
       payload = JSON.parse(response.body)
       if payload.has_key?('error_type')
-        message = "Error type #{ payload['error_type'] } returned from the server when calling #{ uri }.  "
-        payload['errors'].keys.each { |error|
-          message += "#{ error }: #{ payload['errors'][error] }.  "
-        }
-
-        raise message
+        raise build_error(uri, payload)
       end
 
       return payload['data']
+    end
+
+    private
+
+    def build_error(uri, parsed)
+      message = "Error type #{parsed['error_type']} returned from the server when calling #{uri}.  "
+      return message unless parsed.include?('errors')
+
+      parsed['errors'].each_pair do |error, text|
+        message += "#{error}: #{text}.  "
+      end
+      message
     end
   end
 end
