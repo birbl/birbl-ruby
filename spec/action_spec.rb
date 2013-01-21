@@ -28,18 +28,18 @@ describe Birbl::Action do
   context 'with initialization' do
     subject { Birbl::Action.new('the_key') }
 
+    before do
+      subject # create it
+    end
+
     context '.instance' do
       it 'returns the instance' do
-        subject # create it
-
         expect(Birbl::Action.instance).to be(subject)
       end
     end
 
     context '.instance?' do
       it 'is true' do
-        subject # create it
-
         expect(Birbl::Action.instance?).to be_true
       end
     end
