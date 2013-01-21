@@ -3,6 +3,7 @@
 #
 
 module Birbl
+  require 'active_model'
   require 'birbl/action'
   require 'birbl/resource'
   require 'birbl/partner'
@@ -12,5 +13,3 @@ module Birbl
   #require 'birbl/participation'
   #require 'birbl/user'
 end
-
-include Birbl
