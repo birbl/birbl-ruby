@@ -1,6 +1,9 @@
 require 'birbl'
 
 describe Birbl::Action do
+  let(:response) { stub('Response', body: '{"data": "payload"}') }
+  let(:error_response) { stub('Response', body: '{"error_type": "badrequest"}') }
+
   context 'without initialization' do
     context '.instance' do
       it 'raises an error' do
@@ -28,18 +31,18 @@ describe Birbl::Action do
   context 'with initialization' do
     subject { Birbl::Action.new('the_key') }
 
+    before do
+      subject # create it
+    end
+
     context '.instance' do
       it 'returns the instance' do
-        subject # create it
-
         expect(Birbl::Action.instance).to be(subject)
       end
     end
 
     context '.instance?' do
       it 'is true' do
-        subject # create it
-
         expect(Birbl::Action.instance?).to be_true
       end
     end
@@ -81,15 +84,12 @@ describe Birbl::Action do
       end
     end
 
-    context '.get' do
-      let(:response) { stub('Response', body: '{"data": "payload"}') }
-      let(:error_response) { stub('Response', body: '{"error_type": "badrequest"}') }
-
+    context '#get' do
       before do
         RestClient.stub(get: response)
       end
 
-      it 'proxies to foobar' do
+      it 'proxies to RestClient' do
         RestClient.should_receive(:get).
           with('https://api.birbl.com/partners', BIRBL_KEY: 'the_key').
           and_return(response)
@@ -109,5 +109,20 @@ describe Birbl::Action do
         }.to raise_error(RuntimeError, /badrequest/)
       end
     end
+
+    context '#post' do
+      it 'proxies to RestClient' do
+        RestClient.should_receive(:post).
+          with(
+            'https://api.birbl.com/partners',
+            'data=[]',
+            BIRBL_KEY: 'the_key'
+          ).
+          and_return(response)
+
+        subject.post('partners')
+      end
+    end
   end
 end
+
