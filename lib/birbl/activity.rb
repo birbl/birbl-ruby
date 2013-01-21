@@ -6,17 +6,38 @@ module Birbl
   class Activity < Birbl::Resource
     attr_reader :partner
 
-    def initialize(partner, id = nil, data = {})
+    def initialize(attributes = {}, partner)
       @partner    = partner
       @occasions  = []
 
-      super id, data
+      super attributes
     end
 
-    protected
+    def self.create(attributes, partner)
+      data = Birbl::Action.instance.post("#{ self.base_url(partner.attributes['id']) }", self.post_data(attributes))
 
-    # Implements Birbl::Resource.fields
-    def fields
+      new(data, partner)
+    end
+
+    def self.find(id, partner)
+      data = Birbl::Action.instance.get("#{ self.base_url(partner.attributes['id']) }/#{ id }")
+
+      new(data, partner)
+    end
+
+    def self.delete(id, partner)
+      Birbl::Action.instance.delete("#{ self.base_url(partner.attributes['id']) }/#{ id }")
+    end
+
+    def url
+      "#{ self.class.base_url(@partner.attributes['id']) }/#{ @attributes['id'] }"
+    end
+
+    def self.base_url(partner_id)
+      "partners/#{ partner_id }/activities"
+    end
+
+    def self.fields
       {
       'name'                  => {:writable => true, :not_null => true},
       'description'           => {:writable => true, :not_null => false},
@@ -30,11 +51,5 @@ module Birbl
       'fixed_costs'           => {:writable => true, :not_null => false}
       }
     end
-
-    # Implements Birbl::Resource.url
-    def url
-      "partners/#{ @partner.id }/activities"
-    end
-
   end
 end

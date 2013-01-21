@@ -5,15 +5,28 @@ Birbl::Action.new('development')
 Birbl::Action.instance.dev_url = 'http://localhost:8080'
 Birbl::Action.instance.use_sandbox = true
 
-#partner = {
-#  'description' => 'New partner description',
-#  'email'       => 'partner3@example.com',
-#  'name'        => 'Test partner from Ruby',
-#  'website'     => 'www.url.com'
-#}
+partner_data = {
+  'id'      => 1,
+  'name'    => 'Dummy partner',
+  'email'   => 'partner@example.com',
+  'website' => 'www.example.com'
+}
 
-#puts Birbl::Action.instance.post('partners', partner).to_yaml
+partner = Birbl::Partner.find(456)
 
-partner = Birbl::Partner.new()
-partner.property('name', '')
-puts "valid? #{ partner.has_valid_data? }"
+activity_data = {
+  'name'                  => 'Dummy activity',
+  'description'           => 'Activity desription',
+  'base_price'            => 1000,
+  'minimum_price'         => 100,
+  'maximum_capacity'      => 10,
+  'minimum_participants'  => 1,
+
+  # optional
+  'variation_limit'       => 4,
+  'cost_per_participant'  => 100,
+  'fixed_costs'           => 300
+}
+
+activity = partner.activity(1225)
+Birbl::Activity.delete(1225, partner)
