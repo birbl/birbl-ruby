@@ -4,7 +4,7 @@
 
 module Birbl
   require 'active_model'
-  require 'birbl/action'
+  require 'birbl/client'
   require 'birbl/resource'
   require 'birbl/partner'
   require 'birbl/activity'

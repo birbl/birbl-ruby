@@ -1,6 +1,6 @@
 require 'birbl'
 
-describe Birbl::Action do
+describe Birbl::Client do
   let(:response) { stub('Response', body: '{"data": "payload"}') }
   let(:error_response) { stub('Response', body: '{"error_type": "badrequest"}') }
 
@@ -8,28 +8,28 @@ describe Birbl::Action do
     context '.instance' do
       it 'raises an error' do
         expect {
-          Birbl::Action.instance
+          Birbl::Client.instance
         }.to raise_error(RuntimeError, /No instance/)
       end
     end
 
     context '.instance?' do
       it 'is false' do
-        expect(Birbl::Action.instance?).to be_false
+        expect(Birbl::Client.instance?).to be_false
       end
     end
 
     context '.new' do
       it 'takes one parameter' do
         expect {
-          Birbl::Action.new
+          Birbl::Client.new
         }.to raise_error(ArgumentError, /\(0 for 1\)/)
       end
     end
   end
 
   context 'with initialization' do
-    subject { Birbl::Action.new('the_key') }
+    subject { Birbl::Client.new('the_key') }
 
     before do
       subject # create it
@@ -37,13 +37,13 @@ describe Birbl::Action do
 
     context '.instance' do
       it 'returns the instance' do
-        expect(Birbl::Action.instance).to be(subject)
+        expect(Birbl::Client.instance).to be(subject)
       end
     end
 
     context '.instance?' do
       it 'is true' do
-        expect(Birbl::Action.instance?).to be_true
+        expect(Birbl::Client.instance?).to be_true
       end
     end
 
@@ -125,4 +125,3 @@ describe Birbl::Action do
     end
   end
 end
-

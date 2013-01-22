@@ -26,11 +26,11 @@ describe Birbl::Activity do
   let(:partner) { stub('Partner', attributes: {'id' => 1}) }
 
   before do
-    Birbl::Action.new('the_key')
-    Birbl::Action.instance.stub(:get).with("#{ activity_url }/10").and_return(dummy_data)
-    Birbl::Action.instance.stub(:post).with(activity_url, post_data).and_return(true)
-    Birbl::Action.instance.stub(:put).with("#{ activity_url }/10", post_data).and_return(true)
-    Birbl::Action.instance.stub(:delete).with("#{ activity_url }/10").and_return(true)
+    Birbl::Client.new('the_key')
+    Birbl::Client.instance.stub(:get).with("#{ activity_url }/10").and_return(dummy_data)
+    Birbl::Client.instance.stub(:post).with(activity_url, post_data).and_return(true)
+    Birbl::Client.instance.stub(:put).with("#{ activity_url }/10", post_data).and_return(true)
+    Birbl::Client.instance.stub(:delete).with("#{ activity_url }/10").and_return(true)
   end
 
   context 'initialization' do

@@ -5,14 +5,14 @@ describe Birbl::Partner do
   let(:partner_response) { {'data' => partner_data} }
   let(:action) do
     stub(
-      'Birbl::Action',
+      'Birbl::Client',
       :get => partner_response,
       :post => partner_response,
     )
   end
 
   before do
-    Birbl::Action.stub(:instance => action)
+    Birbl::Client.stub(:instance => action)
   end
 
   context '.create' do
@@ -68,4 +68,3 @@ describe Birbl::Partner do
     it 'sends a delete request'
   end
 end
-

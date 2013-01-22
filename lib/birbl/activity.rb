@@ -14,19 +14,19 @@ module Birbl
     end
 
     def self.create(attributes, partner)
-      data = Birbl::Action.instance.post("#{ self.base_url(partner.attributes['id']) }", self.post_data(attributes))
+      data = Birbl::Client.instance.post("#{ self.base_url(partner.attributes['id']) }", self.post_data(attributes))
 
       new(data, partner)
     end
 
     def self.find(id, partner)
-      data = Birbl::Action.instance.get("#{ self.base_url(partner.attributes['id']) }/#{ id }")
+      data = Birbl::Client.instance.get("#{ self.base_url(partner.attributes['id']) }/#{ id }")
 
       new(data, partner)
     end
 
     def self.delete(id, partner)
-      Birbl::Action.instance.delete("#{ self.base_url(partner.attributes['id']) }/#{ id }")
+      Birbl::Client.instance.delete("#{ self.base_url(partner.attributes['id']) }/#{ id }")
     end
 
     def url

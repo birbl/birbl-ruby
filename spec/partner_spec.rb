@@ -12,16 +12,16 @@ post_data.delete('id')
 describe Birbl::Partner do
 
   before do
-    Birbl::Action.new('the_key')
-    Birbl::Action.instance.stub(:get).with('partners/1').and_return(dummy_data)
-    Birbl::Action.instance.stub(:post).with('partners', post_data).and_return(true)
-    Birbl::Action.instance.stub(:put).with('partners/1', post_data).and_return(true)
-    Birbl::Action.instance.stub(:delete).with('partners/1').and_return(true)
+    Birbl::Client.new('the_key')
+    Birbl::Client.instance.stub(:get).with('partners/1').and_return(dummy_data)
+    Birbl::Client.instance.stub(:post).with('partners', post_data).and_return(true)
+    Birbl::Client.instance.stub(:put).with('partners/1', post_data).and_return(true)
+    Birbl::Client.instance.stub(:delete).with('partners/1').and_return(true)
 
     activity_data = [{'id' => 10, 'name' => 'Dummy activity'}]
-    Birbl::Action.instance.stub(:get).with('partners/1/activities').and_return(activity_data)
-    Birbl::Action.instance.stub(:get).with('partners/1/activities/10').and_return(activity_data[0])
-    Birbl::Action.instance.stub(:post).with('partners/1/activities', activity_data).and_return(true)
+    Birbl::Client.instance.stub(:get).with('partners/1/activities').and_return(activity_data)
+    Birbl::Client.instance.stub(:get).with('partners/1/activities/10').and_return(activity_data[0])
+    Birbl::Client.instance.stub(:post).with('partners/1/activities', activity_data).and_return(true)
   end
 
   context 'initialization' do

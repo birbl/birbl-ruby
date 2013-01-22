@@ -1,12 +1,12 @@
 Gem::Specification.new do |s|
   s.name        = 'birbl'
-  s.version     = '0.0.1'
-  s.date        = '2013-01-17'
+  s.version     = '0.0.2'
+  s.date        = '2013-01-12'
   s.summary     = "A Ruby implementation of the Birbl API"
   s.description = "Use the Birbl API from your own Ruby program"
   s.authors     = ["Aaron Craig"]
   s.email       = 'aaron@birbl.com'
-  s.files       = ["lib/birbl.rb"]
+  s.files       = ["lib/birbl.rb"] + Dir["lib/birbl/*"]
   s.homepage    =
     'http://rubygems.org/gems/birbl'
 
@@ -16,4 +16,3 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pry-plus'
   s.add_development_dependency 'rspec'
 end
-

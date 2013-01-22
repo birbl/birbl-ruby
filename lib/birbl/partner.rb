@@ -27,7 +27,7 @@ module Birbl
     #
     # They will be loaded from the API the first time they are requested
     def activities
-      data = Birbl::Action.instance.get("#{ url }/activities")
+      data = Birbl::Client.instance.get("#{ url }/activities")
       data.each { |item|
         add_activity(item)
       }

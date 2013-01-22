@@ -5,7 +5,7 @@ require 'json'
 require 'rest_client'
 
 module Birbl
-  class Action
+  class Client
     class << self
       @instance = nil
 

@@ -1,9 +1,9 @@
 require 'birbl'
 require 'yaml'
 
-Birbl::Action.new('development')
-Birbl::Action.instance.dev_url = 'http://localhost:8080'
-Birbl::Action.instance.use_sandbox = true
+Birbl::Client.new('development')
+Birbl::Client.instance.dev_url = 'http://localhost:8080'
+Birbl::Client.instance.use_sandbox = true
 
 partner_data = {
   'id'      => 1,

@@ -5,13 +5,13 @@ describe Birbl::Resource do
   before do
     dummy_data = {'placeholder' => 'some data'}
 
-    Birbl::Action.new('the_key')
-    Birbl::Action.instance.stub(:get).with('resource/1').and_return(dummy_data)
-    Birbl::Action.instance.stub(:post).with('resource/1', dummy_data).and_return(true)
-    Birbl::Action.instance.stub(:put).with('resource/1', dummy_data).and_return(true)
-    Birbl::Action.instance.stub(:delete).with('resource/1').and_return(true)
+    Birbl::Client.new('the_key')
+    Birbl::Client.instance.stub(:get).with('resource/1').and_return(dummy_data)
+    Birbl::Client.instance.stub(:post).with('resource/1', dummy_data).and_return(true)
+    Birbl::Client.instance.stub(:put).with('resource/1', dummy_data).and_return(true)
+    Birbl::Client.instance.stub(:delete).with('resource/1').and_return(true)
 
-    Birbl::Action.instance.stub(:get).with('resource/2').and_return({'placeholder' => 'instance 2'})
+    Birbl::Client.instance.stub(:get).with('resource/2').and_return({'placeholder' => 'instance 2'})
   end
 
   context 'initialization' do
