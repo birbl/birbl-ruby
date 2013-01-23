@@ -53,7 +53,7 @@ module Birbl
       'name'        => {:writable => true, :not_null => true},
       'description' => {:writable => true, :not_null => false},
       'email'       => {:writable => true, :not_null => true},
-      'phone'       => {:writable => true, :not_null => false},
+      'telephone'   => {:writable => true, :not_null => false},
       'website'     => {:writable => true, :not_null => false}
       }
     end
