@@ -7,6 +7,7 @@ describe Birbl::Resource do
   before do
     Birbl::Client.new('the_key')
     Birbl::Client.instance.stub(:get).with('resource/1').and_return(dummy_data)
+    Birbl::Client.instance.stub(:get).with('resource').and_return([dummy_data])
     Birbl::Client.instance.stub(:post).with('resource', dummy_data).and_return(true)
     Birbl::Client.instance.stub(:put).with('resource/1', dummy_data).and_return(true)
     Birbl::Client.instance.stub(:delete).with('resource/1').and_return(true)
@@ -25,6 +26,10 @@ describe Birbl::Resource do
 
       it 'finds an instance' do
         expect { Birbl::Resource.find(1) }.not_to raise_error
+      end
+
+      it 'finds all instances' do
+        expect { Birbl::Resource.all() }.not_to raise_error
       end
     end
 

@@ -22,6 +22,17 @@ module Birbl
       Birbl::Client.instance.put(url, self.class.post_data(@attributes))
     end
 
+    def self.all
+      data = Birbl::Client.instance.get("#{ self.base_url }")
+
+      items = []
+      data.each { |item|
+        items<< new(item)
+      }
+
+      return items
+    end
+
     def self.find(id)
       data = Birbl::Client.instance.get("#{ self.base_url }/#{ id }")
       new(data)
