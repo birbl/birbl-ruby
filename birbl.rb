@@ -5,9 +5,13 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
-partners = Birbl::Partner.all
-puts partners.to_yaml
+partner = Birbl::Partner.find(447)
+partner.activities
 exit
+
+#partners = Birbl::Partner.all
+#puts partners.to_yaml
+#exit
 
 
 partner_data = {

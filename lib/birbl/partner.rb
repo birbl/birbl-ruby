@@ -31,6 +31,8 @@ module Birbl
       data.each { |item|
         add_activity(item)
       }
+
+      return @activities
     end
 
     # Add an activity to this partner from the given data.
