@@ -8,10 +8,6 @@ module Birbl
       super + [:name, :description, :email, :telephone, :website, :options, :users]
     end
 
-    def self.writable_names
-      super + [:name, :description, :email, :telephone, :website, :options]
-    end
-
     define_attributes
 
     validates_presence_of :name

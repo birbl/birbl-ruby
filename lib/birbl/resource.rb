@@ -16,10 +16,6 @@ module Birbl
       [:id]
     end
 
-    def self.writable_names
-      []
-    end
-
     def self.define_attributes
       attribute_names.each do |attribute|
         define_method attribute do
@@ -84,9 +80,6 @@ module Birbl
 
     def as_json
       attributes.symbolize_keys
-      #attributes.symbolize_keys.select {|k,v|
-      #  self.class.writable_names.include?(k)
-      #}
     end
 
     def new_record?
