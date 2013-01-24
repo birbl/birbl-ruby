@@ -82,8 +82,17 @@ module Birbl
         raise build_error(uri, payload)
       end
 
-      result = JSON.parse(payload['data'])
-      HashWithIndifferentAccess.new(result)
+      return HashWithIndifferentAccess.new(payload['data']) unless payload['data'].class == Array
+
+      payload['data'].map { |item|
+        item.select! { |k,v|
+          puts "#{ k }: #{ v }"
+          puts v.to_yaml
+          v.class != Hash or !v.empty?
+        }
+
+        HashWithIndifferentAccess.new(item)
+      }
     end
 
     private

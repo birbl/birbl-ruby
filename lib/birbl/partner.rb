@@ -5,7 +5,7 @@
 module Birbl
   class Partner < Birbl::Resource
     def self.attribute_names
-      super + [:name, :description, :email, :phone, :website]
+      super + [:name, :description, :email, :telephone, :website, :options, :users]
     end
 
     define_attributes
@@ -44,7 +44,7 @@ module Birbl
     # If the activity does not already have an id, it will automatically be sent to the API
     # when this function is called
     def add_activity(data)
-      activity = 
+      activity =
         if data['id'].nil?
           Birbl::Activity.create(data.merge(:partner_id => self))
         else
@@ -56,4 +56,3 @@ module Birbl
     end
   end
 end
-

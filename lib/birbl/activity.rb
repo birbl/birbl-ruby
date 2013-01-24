@@ -16,7 +16,11 @@ module Birbl
         :discount_profile,
         :minimum_participants,
         :cost_per_participant,
-        :fixed_costs
+        :fixed_costs,
+        :options,
+        :warnings,
+        :active,
+        :cancellation_policy
       ]
     end
 
@@ -42,4 +46,3 @@ module Birbl
     end
   end
 end
-
