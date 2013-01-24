@@ -66,21 +66,25 @@ module Birbl
       uri = '/' + uri if uri !~ /^\//
 
       response = nil
-      case method
-      when 'get'
-        response = RestClient.get(url + uri, :BIRBL_KEY => @api_key)
-      when 'post'
-        response = RestClient.post(url + uri, json_data(data), :BIRBL_KEY => @api_key)
-      when 'put'
-        response = RestClient.put(url + uri, json_data(data), :BIRBL_KEY => @api_key)
-      when 'delete'
-        response = RestClient.delete(url + uri, :BIRBL_KEY => @api_key)
+      begin
+        case method
+        when 'get'
+          response = RestClient.get(url + uri, :BIRBL_KEY => @api_key)
+        when 'post'
+          response = RestClient.post(url + uri, json_data(data), :BIRBL_KEY => @api_key)
+        when 'put'
+          response = RestClient.put(url + uri, json_data(data), :BIRBL_KEY => @api_key)
+        when 'delete'
+          response = RestClient.delete(url + uri, :BIRBL_KEY => @api_key)
+        end
+      rescue Exception => e
+        # this is raised for any error coming from the server, including API errors, as the API
+        # throws 500, 404, etc, which RestClient breaks on
+        payload = e.respond_to?('http_body') ? JSON.parse(e.http_body) : {}
+        raise build_error(e, uri, method, data, payload)
       end
 
       payload = JSON.parse(response.body)
-      if payload.has_key?('error_type')
-        raise build_error(uri, payload)
-      end
 
       return HashWithIndifferentAccess.new(payload['data']) unless payload['data'].class == Array
 
@@ -97,8 +101,10 @@ module Birbl
 
     private
 
-    def build_error(uri, parsed)
-      message = "Error type #{parsed['error_type']} returned from the server when calling #{uri}.  "
+    def build_error(error, uri, method, data, parsed)
+      message = "RestClient did not get a good response from the server, responding with '#{ error.message }\n"
+      message<< "The Birbl API server said: Error type #{parsed['error_type']} when making a #{ method.upcase } call to #{uri}.  " if parsed.has_key?('error_type')
+      message<< "\nData in this call: #{ data.to_yaml }" unless data.empty?
       return message unless parsed.include?('errors')
 
       parsed['errors'].each_pair do |error, text|
