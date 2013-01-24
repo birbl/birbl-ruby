@@ -1,7 +1,7 @@
 require 'birbl'
 
 describe Birbl::Client do
-  let(:response) { stub('Response', body: '{"data": "payload"}') }
+  let(:response) { stub('Response', body: '{"data": "{\"id\":1}"}') }
   let(:error_response) { stub('Response', body: '{"error_type": "badrequest"}') }
 
   context 'without initialization' do
@@ -98,7 +98,7 @@ describe Birbl::Client do
       end
 
       it 'returns the parsed data' do
-        expect(subject.get('partners')).to eq('payload')
+        expect(subject.get('partners')).to eq({'id' => 1})
       end
 
       it 'fails on error responses' do
@@ -111,6 +111,16 @@ describe Birbl::Client do
     end
 
     context '#post' do
+      before do
+        RestClient.stub(:post).
+          with(
+            'https://api.birbl.com/partners',
+            'data=[]',
+            BIRBL_KEY: 'the_key'
+          ).
+          and_return(response)
+      end
+
       it 'proxies to RestClient' do
         RestClient.should_receive(:post).
           with(
@@ -122,6 +132,18 @@ describe Birbl::Client do
 
         subject.post('partners')
       end
+
+      it 'parses the response payload' do
+        expect(subject.post('partners')).to be_a(Hash)
+      end
+
+      it 'returns a HashWithIndifferentAccess' do
+        result = subject.post('partners')
+
+        expect(result['id']).to eq(1)
+        expect(result[:id]).to eq(1)
+      end
     end
   end
 end
+

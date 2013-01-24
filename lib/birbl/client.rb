@@ -1,6 +1,8 @@
 ###
 # Handle interactions with the server.
 #
+
+require 'active_support/hash_with_indifferent_access'
 require 'json'
 require 'rest_client'
 
@@ -80,7 +82,8 @@ module Birbl
         raise build_error(uri, payload)
       end
 
-      return payload['data']
+      result = JSON.parse(payload['data'])
+      HashWithIndifferentAccess.new(result)
     end
 
     private

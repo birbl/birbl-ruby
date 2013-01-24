@@ -1,73 +1,62 @@
-require 'birbl'
-
-dummy_data = {
-  'id'      => 1,
-  'name'    => 'Dummy partner',
-  'email'   => 'partner@example.com',
-  'website' => 'www.example.com'
-}
-post_data = dummy_data.clone
-post_data.delete('id')
+require 'spec_helper'
 
 describe Birbl::Partner do
+  let(:client) { stub('Birbl::Client') }
+  let(:partner_attributes) do
+    {
+      'id'      => 1,
+      'name'    => 'Dummy partner',
+      'email'   => 'partner@example.com',
+      'website' => 'www.example.com'
+    }
+  end
+  let(:activity_attributes) do
+    {
+      'id'   => 10,
+      'name' => 'Activity',
+    }
+  end
+
+  subject { Birbl::Partner.new(partner_attributes) }
 
   before do
-    Birbl::Client.new('the_key')
-    Birbl::Client.instance.stub(:get).with('partners/1').and_return(dummy_data)
-    Birbl::Client.instance.stub(:post).with('partners', post_data).and_return(true)
-    Birbl::Client.instance.stub(:put).with('partners/1', post_data).and_return(true)
-    Birbl::Client.instance.stub(:delete).with('partners/1').and_return(true)
-
-    activity_data = [{'id' => 10, 'name' => 'Dummy activity'}]
-    Birbl::Client.instance.stub(:get).with('partners/1/activities').and_return(activity_data)
-    Birbl::Client.instance.stub(:get).with('partners/1/activities/10').and_return(activity_data[0])
-    Birbl::Client.instance.stub(:post).with('partners/1/activities', activity_data).and_return(true)
+    Birbl::Client.stub(:instance => client)
+    client.stub(:get).with('partners/1').and_return(partner_attributes)
   end
 
-  context 'initialization' do
-    it 'creates an empty array for activities' do
-      expect(subject.instance_variable_get(:@activities)).to eq([])
+  context '#activities' do
+    before do
+      client.stub(:get).with('partners/1/activities').
+        and_return([activity_attributes])
+    end
+
+    it 'queries the client' do
+      client.should_receive(:get).with('partners/1/activities').
+        and_return([activity_attributes])
+
+      subject.activities
+    end
+
+    it 'retuns activities' do
+      activities = subject.activities
+
+      expect(activities).to be_a(Array)
+      expect(activities.size).to eq(1)
+      expect(activities[0]).to be_a(Birbl::Activity)
     end
   end
 
-  context 'usage' do
-    context 'without an instance' do
-      it 'deletes a partner' do
-        expect { Birbl::Partner.delete(1) }.not_to raise_error
-      end
-
-      it 'finds a partner' do
-        expect(Birbl::Partner.find(1)).to be_a_kind_of(Birbl::Partner)
-      end
-
-      it 'creates a partner' do
-        expect(Birbl::Partner.create(post_data)).to be_a_kind_of(Birbl::Partner)
-      end
+  context '#activity' do
+    before do
+      client.stub(:get).with('partners/1/activities/10').
+        and_return(activity_attributes)
     end
 
-    context 'with an instance' do
-      subject { Birbl::Partner.find(1) }
+    it 'queries the client' do
+      client.should_receive(:get).with('partners/1/activities/10').
+        and_return(activity_attributes)
 
-      it 'updates an instance' do
-        expect { subject.update }.not_to raise_error
-      end
-
-      it 'gets a property' do
-        expect(subject.attributes['email']).to eq(dummy_data['email'])
-      end
-
-      it 'changes a property' do
-        expect { subject.attributes['website'] = 'www.example2.com' }.not_to raise_error
-      end
-
-    end
-  end
-
-  context 'activities' do
-    subject { Birbl::Partner.find(1) }
-
-    it 'loads all existing activities' do
-      expect(subject.activities).to be_a_kind_of(Array)
+      subject.activity(10)
     end
 
     it 'loads a single activity' do
@@ -75,3 +64,4 @@ describe Birbl::Partner do
     end
   end
 end
+
