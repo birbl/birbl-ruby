@@ -5,11 +5,15 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
-partner= Birbl::Partner.find(456)
-partner.website = 'www.google.com'
-partner.description = 'This is &#39; some text.'
-partner.save
-exit
+#partner = Birbl::Partner.find_by_email('colm@yogadublin.com')
+#puts partner.to_yaml
+#exit
+
+#partner= Birbl::Partner.find(456)
+#partner.website = 'www.google.com'
+#partner.description = 'This is &#39; some text.'
+#partner.save
+#exit
 
 #partners = Birbl::Partner.all
 #puts partners.to_yaml

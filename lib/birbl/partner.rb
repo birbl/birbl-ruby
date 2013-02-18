@@ -18,25 +18,27 @@ module Birbl
       super attributes
     end
 
+    # Find a partner by it's email address
+    def self.find_by_email(email)
+      Birbl::Partner.all.each do |partner|
+        return partner if partner.email == email
+      end
+
+      return nil
+    end
+
     # Get an Activity from this partner by it's id.
     #
     # The Activity will be loaded from the API the first time it is requested
     def activity(id)
-      activity = Birbl::Activity.find(id, :partner => self)
-      @activities << activity
-
-      activity
+      child('activity', id)
     end
 
     # Get an array of this partner's activities.
     #
     # They will be loaded from the API the first time they are requested
     def activities
-      data = Birbl::Client.instance.get("#{path}/activities")
-      data.each do |item|
-        add_activity(item)
-      end
-      @activities
+      children('activities')
     end
 
     # Add an activity to this partner from the given data.
@@ -44,15 +46,7 @@ module Birbl
     # If the activity does not already have an id, it will automatically be sent to the API
     # when this function is called
     def add_activity(data)
-      activity =
-        if data['id'].nil?
-          Birbl::Activity.create(data.merge(:partner_id => self))
-        else
-          Birbl::Activity.new(data)
-        end
-      @activities << activity
-
-      activity
+      add_child('activity', data)
     end
   end
 end

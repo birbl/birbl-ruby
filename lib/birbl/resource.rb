@@ -38,8 +38,8 @@ module Birbl
       Birbl::Client.instance
     end
 
-    def self.create(attributes = {})
-      resource = new(attributes)
+    def self.create(attributes = {}, parent = nil)
+      resource = new(attributes, parent)
       resource.save
       resource
     end
@@ -49,10 +49,10 @@ module Birbl
       results.map { |attributes| new(attributes) }
     end
 
-    def self.find(id, attributes = {})
-      item = new(attributes.merge(:id => id))
+    def self.find(id, attributes = {}, parent = nil)
+      item = new(attributes.merge(:id => id), parent)
       attributes = client.get(item.path)
-      new(attributes)
+      new(attributes, parent)
     end
 
     def self.delete(id, attributes = {})
@@ -60,10 +60,19 @@ module Birbl
       client.delete(item.path)
     end
 
-    def initialize(attributes = {})
+    def self.resource_name
+      self.model_name.to_s.downcase.sub('birbl::', '')
+    end
+
+    def initialize(attributes = {}, parent = nil)
       self.attributes = HashWithIndifferentAccess.new
       attributes.each do |name, value|
         send "#{name}=", value
+      end
+
+      unless parent.nil?
+        instance_variable_set("@#{ parent.class.resource_name }", parent)
+        send("#{ parent.class.resource_name }_id=", parent.id)
       end
     end
 
@@ -71,9 +80,13 @@ module Birbl
       self.class.collection_path + "/#{id}"
     end
 
+    def post_path
+      self.class.collection_path
+    end
+
     def save
       was_new = new_record?
-      result = was_new ? client.post(self.class.collection_path, as_json) : client.put(path, as_json)
+      result = was_new ? client.post(post_path, as_json) : client.put(path, as_json)
       self.id = result['id'] if was_new
       true
     end
@@ -86,7 +99,56 @@ module Birbl
       id.nil?
     end
 
+    # Get an array of this resource's child resources.
+    #
+    # They will be loaded from the API the first time they are requested
+    def children(resource)
+      data = Birbl::Client.instance.get("#{ path }/#{ resource }")
+      data.each do |item|
+        add_child(resource.singularize, item)
+      end
+      instance_variable_get("@#{ resource }")
+    end
+
+    # Add an activity to this partner from the given data.
+    #
+    # If the activity does not already have an id, it will automatically be sent to the API
+    # when this function is called
+    def add_child(resource, data)
+      resource_model = "Birbl::#{ resource.camelize}".constantize
+      parent_name = self.class.resource_name
+
+      object =
+        if data['id'].nil?
+          resource_model.create(data, self)
+        else
+          resource_model.new(data, self)
+        end
+
+      add_to_children(resource, object)
+
+      object
+    end
+
+    # Get an child from this resource by it's id.
+    #
+    # The child resource will be loaded from the API the first time it is requested
+    def child(resource, id)
+      resource_model = "Birbl::#{ resource.camelize}".constantize
+
+      object = resource_model.find(id, {}, self)
+      add_to_children(resource, object)
+
+      object
+    end
+
     private
+
+    def add_to_children(resource, child)
+      children = instance_variable_get("@#{ resource.pluralize }")
+      children << child
+      instance_variable_set("@#{ resource.pluralize }", children)
+    end
 
     def client
       self.class.client
