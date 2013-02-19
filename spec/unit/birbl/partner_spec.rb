@@ -29,6 +29,12 @@ describe Birbl::Partner do
     client.stub(:get).with('partners/1').and_return(partner_attributes)
   end
 
+  context "with an id" do
+    it 'finds an instance' do
+      Birbl::Partner.find(1).should be_a(Birbl::Partner)
+    end
+  end
+
   context '#activities' do
     before do
       client.stub(:get).with('partners/1/activities').
@@ -69,7 +75,7 @@ describe Birbl::Partner do
     end
 
     it 'adds a single activity' do
-      client.should_receive(:post).with('partners/1/activities', unsaved_activity_attributes.merge(:partner_id => 1).symbolize_keys).
+      client.should_receive(:post).with('partners/1/activities', unsaved_activity_attributes.symbolize_keys).
         and_return(activity_attributes)
 
         subject.add_activity(unsaved_activity_attributes)

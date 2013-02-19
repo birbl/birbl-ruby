@@ -13,9 +13,9 @@ module Birbl
     validates_presence_of :name
     validates_presence_of :email
 
-    def initialize(attributes = {})
+    def initialize(attributes = {}, parent = nil)
       @activities = []
-      super attributes
+      super attributes, parent
     end
 
     # Find a partner by it's email address
