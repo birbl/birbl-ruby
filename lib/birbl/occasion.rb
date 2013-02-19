@@ -48,7 +48,7 @@ module Birbl
     end
 
     def price_point(price)
-      @price_points.each do |price_point|
+      price_points.each do |price_point|
         return price_point if price_point.price == price
       end
 

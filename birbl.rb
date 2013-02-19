@@ -5,10 +5,15 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
-partner = Birbl::Partner.find_by_email('colm@yogadublin.com')
-reservation = partner.activities[0].reserve('2013-02-26T09:00:00+00:00', 15, 1)
-puts reservation.to_yaml
-exit
+#partner = Birbl::Partner.find_by_email('colm@yogadublin.com')
+#reservation = partner.activities[0].reserve('2013-02-26T09:00:00+00:00', 1500, 1)
+#puts reservation.to_yaml
+#exit
+
+#reservation = Birbl::Reservation.find(1)
+#reservation.state = 'opt_in'
+#reservation.save
+#exit
 
 #partner= Birbl::Partner.find(456)
 #partner.website = 'www.google.com'

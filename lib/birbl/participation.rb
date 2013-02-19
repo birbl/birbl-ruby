@@ -7,7 +7,8 @@ module Birbl
         :price_point,
         :state,
         :lock_timeout,
-        :token
+        :token,
+        :options
       ]
     end
 
