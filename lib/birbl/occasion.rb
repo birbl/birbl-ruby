@@ -66,6 +66,9 @@ module Birbl
 
     # Returns the current price for this occasion in euro cents
     def current_price
+      # make sure prices are loaded
+      price_points if @current_price.nil?
+
       @current_price[:price]
     end
 

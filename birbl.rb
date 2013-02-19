@@ -9,18 +9,18 @@ Birbl::Client.instance.use_sandbox = true
 #puts user.to_yaml
 #exit
 
-user = Birbl::User.find_by_email('aaron@birbl.com')
-puts user.to_yaml
-exit
+#user = Birbl::User.find_by_email('aaron@birbl.com')
+#puts user.to_yaml
+#exit
 
 #partner = Birbl::Partner.find_by_email('colm@yogadublin.com')
 #reservation = partner.activities[0].reserve('2013-02-26T09:00:00+00:00')
 #puts reservation.to_yaml
 #exit
 
-#occasion = Birbl::Occasion.find(1)
-#puts occasion.to_yaml
-#exit
+occasion = Birbl::Occasion.find(1)
+puts occasion.current_price
+exit
 
 #reservation = Birbl::Reservation.find(1)
 #puts reservation.to_yaml
