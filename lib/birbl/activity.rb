@@ -38,7 +38,6 @@ module Birbl
 
     def partner=(partner)
       @partner = partner
-      self.partner_id = partner.id
     end
 
     def partner
@@ -49,7 +48,17 @@ module Birbl
       child('occasion', id)
     end
 
+    def occasion_by_date(date)
+      d = DateTime.parse(date)
+      occasions.each do |occasion|
+        return occasion if occasion.begin_datetime == d
+      end
+
+      nil
+    end
+
     def occasions
+      return @occasions unless @occasions.empty?
       children('occasions')
     end
 
@@ -77,6 +86,15 @@ module Birbl
       end
 
       occasions
+    end
+
+    # Reserve an activity on the given date, at the given price point for the given amount
+    # of people.  The reservation will be associated with the given user.
+    def reserve(date, price_point, count, user_id = nil)
+      occasion = occasion_by_date(date)
+      raise "No occasion found for #{ date }" if occasion.nil?
+
+      occasion.reserve(price_point, count, user_id)
     end
 
     def path

@@ -72,7 +72,6 @@ module Birbl
 
       unless parent.nil?
         instance_variable_set("@#{ parent.class.resource_name }", parent)
-        send("#{ parent.class.resource_name }_id=", parent.id)
       end
     end
 

@@ -12,5 +12,13 @@ module Birbl
     end
 
     define_attributes
+
+    def participations
+      children('participations')
+    end
+
+    def add_participation(data)
+      add_child('participation', data)
+    end
   end
 end

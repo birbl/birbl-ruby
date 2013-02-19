@@ -38,6 +38,7 @@ module Birbl
     #
     # They will be loaded from the API the first time they are requested
     def activities
+      return @activities unless @activities.empty?
       children('activities')
     end
 

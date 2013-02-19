@@ -5,9 +5,9 @@ module Birbl
         :price,
         :necessary,
         :on,
-        :opt_ins,
-        :cancelled,
         :participants,
+        :paid,
+        :states,
         :offset,
         :reached
       ]

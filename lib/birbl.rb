@@ -5,6 +5,7 @@
 module Birbl
   require 'active_model'
   require 'active_support/inflector'
+  require 'active_support/core_ext/hash/indifferent_access'
   require 'birbl/date_parser'
   require 'birbl/client'
   require 'birbl/resource'
