@@ -5,6 +5,14 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
+#user = Birbl::User.create(:email => 'aaron@birbl.com', :username => 'aaroncraig')
+#puts user.to_yaml
+#exit
+
+user = Birbl::User.find_by_email('aaron@birbl.com')
+puts user.to_yaml
+exit
+
 #partner = Birbl::Partner.find_by_email('colm@yogadublin.com')
 #reservation = partner.activities[0].reserve('2013-02-26T09:00:00+00:00')
 #puts reservation.to_yaml
@@ -14,9 +22,9 @@ Birbl::Client.instance.use_sandbox = true
 #puts occasion.to_yaml
 #exit
 
-reservation = Birbl::Reservation.find(1)
-puts reservation.to_yaml
-exit
+#reservation = Birbl::Reservation.find(1)
+#puts reservation.to_yaml
+#exit
 #reservation.state = 'opt_in'
 #reservation.save
 #exit
