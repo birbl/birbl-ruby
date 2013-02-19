@@ -27,6 +27,18 @@ module Birbl
       else
         super attributes, parent
       end
+
+      if occasion.nil? && !occasion_id.nil?
+        @occasion = Birbl::Occasion.find(occasion_id)
+      end
+    end
+
+    def occasion=(occasion)
+      @occasion = occasion
+    end
+
+    def occasion
+      @occasion
     end
 
     def participations

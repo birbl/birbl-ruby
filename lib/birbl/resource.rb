@@ -51,7 +51,7 @@ module Birbl
 
     def self.find(id, attributes = {}, parent = nil)
       item = new(attributes.merge(:id => id), parent)
-      attributes = client.get(item.path)
+      attributes = client.get("#{ self.resource_name.pluralize }/#{ id }")
       new(attributes, parent)
     end
 

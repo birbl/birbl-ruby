@@ -22,6 +22,10 @@ module Birbl
       @limits        = {:base_price => 0, :minimum_price => 0}
       @reservations  = []
       super attributes, activity
+
+      if activity.nil? && !activity_id.nil?
+        @activity = Birbl::Activity.find(activity_id)
+      end
     end
 
     def activity=(activity)

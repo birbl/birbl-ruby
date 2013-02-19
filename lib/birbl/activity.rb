@@ -34,6 +34,10 @@ module Birbl
     def initialize(attributes = {}, partner = nil)
       @occasions = []
       super attributes, partner
+
+      if partner.nil? && !partner_id.nil?
+        @partner = Birbl::Partner.find(partner_id)
+      end
     end
 
     def partner=(partner)
