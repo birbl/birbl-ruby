@@ -90,8 +90,6 @@ module Birbl
 
       payload['data'].map { |item|
         item.select! { |k,v|
-          puts "#{ k }: #{ v }"
-          puts v.to_yaml
           v.class != Hash or !v.empty?
         }
 

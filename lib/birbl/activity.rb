@@ -31,18 +31,84 @@ module Birbl
     validates_presence_of :minimum_price
     validates_presence_of :maximum_capacity
 
+    def initialize(attributes = {}, partner = nil)
+      @occasions = []
+      super attributes, partner
+    end
+
     def partner=(partner)
       @partner = partner
-      self.partner_id = partner.id
     end
 
     def partner
-      return @partner if @partner
-      @partner = Partner.find(partner_id)
+      @partner
+    end
+
+    def occasion(id)
+      child('occasion', id)
+    end
+
+    def occasion_by_date(date)
+      d = DateTime.parse(date)
+      occasions.each do |occasion|
+        return occasion if occasion.begin_datetime == d
+      end
+
+      nil
+    end
+
+    def occasions
+      return @occasions unless @occasions.empty?
+      children('occasions')
+    end
+
+    # Add one or more occasions, one for each date in the passed array.
+    # Returns an array of new occasion objects
+    #
+    # Valid date strings are:
+    #  * start / end:
+    #     "20140101T153000Z/20140101T163000Z"
+    #      This is equivalent to setting :begins and :ends in the data parameter
+    #  * a comma delimited list:
+    #     "20140101T153000ZP0Y0M0DT2H30M,20140104T153000ZP0Y0M0DT2H30M"
+    #      Note the use of 'P' to indicate the period (or duration).
+    #  * multiple dates as defined by an RRULE:
+    #     "20140101T153000ZP0Y0M0DT2H30MRRULE:FREQ=WEEKLY;BYDAY=TU,TH;UNTIL=20140115T163000Z"
+    def add_occasions(dates)
+      occasions = []
+
+      # hopefully the :dates parameter can eventually be moved to core.  For now it's handled here
+      safe_dates = parse_dates(dates)
+
+      data = client.post("#{ path }/occasions", safe_dates)
+      data.each do |occasion_data|
+        occasions<< add_child('occasion', occasion_data)
+      end
+
+      occasions
+    end
+
+    # Reserve an activity on the given date, at the given price point for the given amount
+    # of people.  The reservation will be associated with the given user.
+    def reserve(date, price_point, count, user_id = nil)
+      occasion = occasion_by_date(date)
+      raise "No occasion found for #{ date }" if occasion.nil?
+
+      occasion.reserve(price_point, count, user_id)
     end
 
     def path
-      "partners/#{partner_id}/" + self.class.collection_path + "/#{id}"
+      "#{ post_path }/#{ id }"
+    end
+
+    def post_path
+      "#{ partner.path }/activities"
+    end
+
+    private
+
+    def parse_dates(date_string)
+      DateParser.new(date_string).dates
     end
   end
 end

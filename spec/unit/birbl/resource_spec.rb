@@ -1,8 +1,29 @@
 require 'spec_helper'
 
 class TestResource < Birbl::Resource
+    def initialize(attributes = {}, parent = nil)
+      @children = []
+      super attributes, parent
+    end
+
   def self.attribute_names
     super + [:foo]
+  end
+
+  define_attributes
+end
+
+class Birbl::Child < Birbl::Resource
+  def self.attribute_names
+    super + [:foo, :testresource_id]
+  end
+
+  def path
+    "test_resources/#{ testresource_id }/children/#{ id }"
+  end
+
+  def post_path
+    "test_resources/#{ testresource_id }/children"
   end
 
   define_attributes
@@ -131,6 +152,22 @@ describe Birbl::Resource do
     end
   end
 
+  context '#children' do
+    let(:child_data) { HashWithIndifferentAccess.new(:foo => 'bar') }
+
+    it 'adds a single child' do
+      client.should_receive(:post).with('test_resources/123/children', child_data.merge(:testresource_id => 123).symbolize_keys)
+
+      saved_resource.add_child('child', child_data)
+    end
+
+    it 'loads children' do
+      client.should_receive(:get).with('test_resources/123/children').and_return([child_data])
+
+      saved_resource.children('children')
+    end
+  end
+
   context '#path' do
     it 'adds the id' do
       expect(saved_resource.path).to eq('test_resources/123')
@@ -152,13 +189,12 @@ describe Birbl::Resource do
       end
     end
 
-    context 'new resource' do
-      it 'posts via the client' do
-        client.should_receive(:post).with('test_resources', saved_attributes.symbolize_keys)
+    context 'existing resource' do
+      it 'puts via the client' do
+        client.should_receive(:put).with('test_resources/123', saved_attributes.symbolize_keys)
 
         saved_resource.save
       end
     end
   end
 end
-
