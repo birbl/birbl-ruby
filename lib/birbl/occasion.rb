@@ -47,12 +47,17 @@ module Birbl
       @price_points
     end
 
-    def price_point(price)
+    # Get a price point from a price amount.  Pass nil to get back the current going price.
+    def price_point(price = nil)
       price_points.each do |price_point|
-        return price_point if price_point.price == price
+        return price_point if (price.nil? && is_current_price?(price_point)) or (!price.nil? && price_point.price == price)
       end
 
       nil
+    end
+
+    def is_current_price?(price_point)
+      price_point.price == @current_price[:price]
     end
 
     def begin_datetime
@@ -63,12 +68,14 @@ module Birbl
       DateTime.parse(ends)
     end
 
-    def reserve(price, count, user_id = nil)
+    # Reserve this occasion.  Price defaults to the current going price.
+    def reserve(price = nil, count = 1, user_id = nil)
       # sanity check
-      raise "#{ price } is not a valid price for this occasion." unless price_point(price)
+      point = price_point(price)
+      raise "#{ price } is not a valid price for this occasion." if point.nil?
 
       data = Birbl::Client.instance.post("#{ path }/reserve",
-        :price_point => price,
+        :price_point => point.price,
         :count       => count,
         :user_id     => user_id
       )

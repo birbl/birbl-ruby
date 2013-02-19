@@ -89,12 +89,13 @@ module Birbl
     end
 
     # Reserve an activity on the given date, at the given price point for the given amount
-    # of people.  The reservation will be associated with the given user.
-    def reserve(date, price_point, count, user_id = nil)
+    # of people.  The reservation will be associated with the given user.  Price defaults
+    # to the current going price
+    def reserve(date, price = nil, count = 1, user_id = nil)
       occasion = occasion_by_date(date)
       raise "No occasion found for #{ date }" if occasion.nil?
 
-      occasion.reserve(price_point, count, user_id)
+      occasion.reserve(price, count, user_id)
     end
 
     def path
