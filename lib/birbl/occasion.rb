@@ -64,6 +64,11 @@ module Birbl
       price_point.price == @current_price[:price]
     end
 
+    # Returns the current price for this occasion in euro cents
+    def current_price
+      @current_price[:price]
+    end
+
     def begin_datetime
       DateTime.parse(begins)
     end
