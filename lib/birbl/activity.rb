@@ -20,7 +20,8 @@ module Birbl
         :options,
         :warnings,
         :active,
-        :cancellation_policy
+        :cancellation_policy,
+        :digital_asset_urls
       ]
     end
 

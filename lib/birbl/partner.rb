@@ -5,7 +5,16 @@
 module Birbl
   class Partner < Birbl::Resource
     def self.attribute_names
-      super + [:name, :description, :email, :telephone, :website, :options, :users]
+      super + [
+        :name,
+        :description,
+        :email,
+        :telephone,
+        :website,
+        :options,
+        :users,
+        :logo_url
+      ]
     end
 
     define_attributes
