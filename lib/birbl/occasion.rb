@@ -18,6 +18,7 @@ module Birbl
 
     def initialize(attributes = {}, activity = nil)
       @price_points  = []
+      @reservations  = []
       @current_price = nil
       @limits        = {:base_price => 0, :minimum_price => 0}
       @reservations  = []
@@ -36,16 +37,27 @@ module Birbl
       @activity
     end
 
+    def reservations
+      if @reservations.empty?
+        data = Birbl::Client.instance.get("#{ path }/reservations")
+        data.each do |reservation_data|
+          @reservations<< Birbl::Reservation(new(reservation_data))
+        end
+      end
+
+      @reservations
+    end
+
     def price_points
-      return @price_points unless @price_points.empty?
+      if @price_points.empty?
+        data = Birbl::Client.instance.get("#{ path }/prices")
 
-      data = Birbl::Client.instance.get("#{ path }/prices")
+        @current_price = data[:current]
+        @limits        = data[:limits]
 
-      @current_price = data[:current]
-      @limits        = data[:limits]
-
-      data[:price_points].each do |price|
-        @price_points<< Birbl::PricePoint.new(price, self)
+        data[:price_points].each do |price|
+          @price_points<< Birbl::PricePoint.new(price, self)
+        end
       end
 
       @price_points

@@ -8,7 +8,9 @@ module Birbl
         :price_point,
         :updated_at,
         :user_id,
-        :state
+        :state,
+        :paid,
+        :payment_data
       ]
     end
 
@@ -47,6 +49,15 @@ module Birbl
 
     def add_participation(data)
       add_child('participation', data)
+    end
+
+    def pay(payment_data)
+      Birbl::Client.instance.post("reservations/payments/pay", payment_data)
+    end
+
+    def self.payment_due
+      data = Birbl::Client.instance.get("reservations/payments/due")
+      data.collect { |r_data| Birbl::Reservation.new(r_data) }
     end
   end
 end
