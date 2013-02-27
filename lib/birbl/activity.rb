@@ -93,6 +93,13 @@ module Birbl
       occasions
     end
 
+    # Find active activities
+    def self.active
+      data = client.get('/activities/show_active')
+
+      data.collect { |a_data| Birbl::Activity.new(a_data) }
+    end
+
     # Reserve an activity on the given date, at the given price point for the given amount
     # of people.  The reservation will be associated with the given user.  Price defaults
     # to the current going price
