@@ -51,6 +51,11 @@ module Birbl
       children('activities')
     end
 
+    # Get an array of active activities
+    def active_activities
+      activities.keep_if { |activity| activity.active? }
+    end
+
     # Add an activity to this partner from the given data.
     #
     # If the activity does not already have an id, it will automatically be sent to the API

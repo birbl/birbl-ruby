@@ -5,7 +5,9 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
-#puts Birbl::Activity.active.to_yaml
+Birbl::Partner.find(1).active_activities.each do |activity|
+  puts activity.active_occasions.to_yaml
+end
 exit
 
 #Birbl::Reservation.payment_due.each { |d| puts d.inspect }

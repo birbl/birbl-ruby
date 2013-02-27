@@ -100,6 +100,31 @@ module Birbl
       data.collect { |a_data| Birbl::Activity.new(a_data) }
     end
 
+    # Determine whether or not this is an active activity.
+    # Active activities have their active flag set to true, and at least one occasion is in
+    # the future
+    def active?
+      active && has_active_occasions?
+    end
+
+    # Determine whether at least one occasion is in the future
+    def has_active_occasions?
+      now = Time.now
+
+      occasions.each do |occasion|
+        return true if now <= Time.parse(occasion.active_on)
+      end
+
+      return false
+    end
+
+    # Return an array of future occasions for this activity
+    def active_occasions
+      now = Time.now
+
+      occasions.keep_if { |occasion| now <= Time.parse(occasion.active_on) }
+    end
+
     # Reserve an activity on the given date, at the given price point for the given amount
     # of people.  The reservation will be associated with the given user.  Price defaults
     # to the current going price

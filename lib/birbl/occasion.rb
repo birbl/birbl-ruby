@@ -92,6 +92,11 @@ module Birbl
       DateTime.parse(ends)
     end
 
+    # Return the date this occasion becomes active.  Either the available_from or begins field
+    def active_on
+      available_from || begins
+    end
+
     # Reserve this occasion.  Price defaults to the current going price.
     def reserve(price = nil, count = 1, user_id = nil)
       # sanity check
