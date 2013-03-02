@@ -29,7 +29,13 @@ module Birbl
 
     def reservations
       return @reservations unless @reservations.empty?
-      children('reservations')
+
+      data = client.get("#{ path }/reservations")
+      data.each do |item|
+        @reservations<< Birbl::Reservation.new(item)
+      end
+
+      @reservations
     end
 
     def self.find_by_email(email)
