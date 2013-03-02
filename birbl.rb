@@ -5,8 +5,20 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
-reservation = Birbl::Reservation.find(4)
-puts reservation.participations.to_yaml
+#o = Birbl::Occasion.find(1)
+#u = Birbl::User.find(1)
+
+#r = o.reserve(1500, 1, 1)
+
+#r.state = 'paying'
+#r.save
+
+#r.state = 'opt_in'
+#r.save
+
+r = Birbl::Reservation.find(6)
+response = r.cancel
+puts response.to_yaml
 exit
 #Birbl::Partner.find(1).active_activities.each do |activity|
 #  puts activity.active_occasions.to_yaml

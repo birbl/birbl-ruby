@@ -52,7 +52,15 @@ module Birbl
     end
 
     def pay(payment_data)
-      Birbl::Client.instance.post("reservations/payments/pay", payment_data)
+      client.post("#{ path }/pay", payment_data)
+    end
+
+    def cancel(participation_ids = [])
+      if participation_ids.empty?
+          participation_ids = participations.collect { |p| p.id }
+      end
+
+      client.put(path, {:cancel => participation_ids})
     end
 
     def self.payment_due
