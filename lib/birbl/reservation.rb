@@ -44,7 +44,7 @@ module Birbl
     end
 
     def participations
-      children('participations')
+      @participations
     end
 
     def add_participation(data)
