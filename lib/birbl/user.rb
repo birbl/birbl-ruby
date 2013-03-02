@@ -32,7 +32,7 @@ module Birbl
 
       data = client.get("#{ path }/reservations")
       data.each do |item|
-        @reservations<< Birbl::Reservation.new(item)
+        @reservations<< Birbl::Reservation.find(item['id'])
       end
 
       @reservations
