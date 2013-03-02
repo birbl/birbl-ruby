@@ -7,7 +7,8 @@ module Birbl
         :email,
         :active,
         :partner_id,
-        :options
+        :options,
+        :reservations
         ]
     end
 
@@ -17,9 +18,18 @@ module Birbl
     validates_presence_of :email
     validates_presence_of :active
 
+    def initialize(attributes = {}, parent = nil)
+      @reservations = []
+      super attributes, parent
+    end
 
     def active?
        @active
+    end
+
+    def reservations
+      return @reservations unless @reservations.empty?
+      children('reservations')
     end
 
     def self.find_by_email(email)

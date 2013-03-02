@@ -5,10 +5,14 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
-Birbl::Partner.find(1).active_activities.each do |activity|
-  puts activity.active_occasions.to_yaml
-end
+user = Birbl::User.find(1)
+puts user.to_yaml
+puts user.reservations.to_yaml
 exit
+#Birbl::Partner.find(1).active_activities.each do |activity|
+#  puts activity.active_occasions.to_yaml
+#end
+#exit
 
 #Birbl::Reservation.payment_due.each { |d| puts d.inspect }
 #user = Birbl::User.create(:email => 'aaron@birbl.com', :username => 'aaroncraig')
