@@ -81,7 +81,7 @@ module Birbl
       # make sure prices are loaded
       price_points if @current_price.nil?
 
-      @current_price[:price]
+      @current_price
     end
 
     def begin_datetime
