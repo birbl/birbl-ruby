@@ -5,6 +5,10 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
+date_string = '20130311T211500ZP0Y0M0D0H45MRRULE:FREQ=WEEKLY;BYDAY=MO;UNTIL=20130326T100000Z,20130314T201500ZP0Y0M0D0H45MRRULE:FREQ=WEEKLY;BYDAY=TH;UNTIL=20130329T100000Z'
+
+puts Birbl::DateParser.new(date_string).dates.to_yaml
+exit
 #o = Birbl::Occasion.find(1)
 #r = o.reserve(1500, 6, 1)
 

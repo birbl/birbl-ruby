@@ -16,17 +16,17 @@ module Birbl
 
     def parse_dates(date_string)
       dates = []
-      if date_string =~ /(.+?)RRULE:(.+)/
-        dates += parse_rrule_item($1, $2)
-      elsif date_string =~ /,/
+      if date_string =~ /,/
         date_string.split(/\s*,\s*/).each { |date|
           dates<< parse_dates(date)
         }
+      elsif date_string =~ /(.+?)RRULE:(.+)/
+        dates += parse_rrule_item($1, $2)
       else
         dates<< parse_date_item(date_string)
       end
 
-      dates
+      dates.flatten
     end
 
     # Parse a single date string, which may indicate begin/end in one of two ways,
