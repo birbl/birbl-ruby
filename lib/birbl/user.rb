@@ -38,6 +38,10 @@ module Birbl
       @reservations
     end
 
+    def writable_attributes
+      attributes.select { |k,v| ['username', 'active', 'email'].include?(k.to_s) }
+    end
+
     def self.find_by_email(email)
       attributes = client.get("users/show_by_email/#{ email.sub('.', '+') }")
       attributes.empty? ? nil : new(attributes)
