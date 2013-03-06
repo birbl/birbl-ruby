@@ -91,7 +91,6 @@ module Birbl
     end
 
     def as_json
-      puts writable_attributes.to_yaml
       writable_attributes.symbolize_keys
     end
 
