@@ -63,7 +63,6 @@ module Birbl
     end
 
     def occasions
-      return @occasions unless @occasions.empty?
       children('occasions')
     end
 

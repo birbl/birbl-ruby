@@ -106,6 +106,9 @@ module Birbl
     #
     # They will be loaded from the API the first time they are requested
     def children(resource)
+      existing = instance_variable_get("@#{ resource }")
+      return existing unless existing.empty?
+
       data = Birbl::Client.instance.get("#{ path }/#{ resource }")
       data.each do |item|
         add_child(resource.singularize, item)
@@ -137,12 +140,23 @@ module Birbl
     #
     # The child resource will be loaded from the API the first time it is requested
     def child(resource, id)
+      test = child_by_id(resource, id)
+      return test unless test.nil?
+
       resource_model = "Birbl::#{ resource.camelize}".constantize
 
       object = resource_model.find(id, {}, self)
       add_to_children(resource, object)
 
       object
+    end
+
+    def child_by_id(resource, id)
+      children(resource.pluralize).each { |o|
+        return o if o.id == id
+      }
+
+      nil
     end
 
     private

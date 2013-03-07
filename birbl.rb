@@ -5,8 +5,8 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
-user = Birbl::User.find(1)
-user.email = 'foo@example.com'
-user.save
+activity = Birbl::Activity.find(5)
+puts activity.occasions.length
 
-puts user.to_yaml
+occasion = activity.occasion(33)
+puts activity.occasions.length
