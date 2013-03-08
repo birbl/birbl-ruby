@@ -38,7 +38,6 @@ module Birbl
       start  = DateTime.parse($1)
       period = $2
       period =~ /(\d+)Y(\d+)M(\d+)DT(\d+)H(\d+)M/
-
       years   = $1.to_i
       months  = $2.to_i
       days    = $3.to_i
@@ -61,15 +60,25 @@ module Birbl
     # It is likely that you want to pass the start date with a period indicator,
     # as opposed to an end date.
     def parse_rrule_item(start, rrule_string)
-      parsed   = parse_date_item(start)
-      duration = get_duration(parsed)
-      rrule    = Rrule.new(rrule_string)
-      current  = DateTime.parse(parsed)
-      dates    = []
+      period   = nil
+      duration = nil
+      if start =~ /(P.+)/
+        period = $1
+      else
+        # assume start / end
+        duration = get_duration(start)
+      end
 
-      rrule.dates(current).each do |date|
-        end_date = date.to_time.to_i + duration
-        dates<< "#{ date.strftime(fmt) }/#{ Time.at(end_date).to_datetime.strftime(fmt) }"
+      dates = []
+      Rrule.new(rrule_string).dates(DateTime.parse(start)).each do |datetime|
+        parsed = parse_date_item(datetime)
+
+        if period.nil?
+          end_date = datetime.to_time.to_i + duration
+          dates<< "#{ datetime.strftime(fmt) }/#{ Time.at(end_date).to_datetime.strftime(fmt) }"
+        else
+          dates<< parse_date_item(datetime.strftime(fmt) + period)
+        end
       end
 
       dates
@@ -85,7 +94,6 @@ module Birbl
     def fmt
       '%Y%m%dT%H%M%SZ'
     end
-
 
   end
 end
