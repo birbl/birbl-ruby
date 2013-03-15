@@ -12,7 +12,6 @@ module Birbl
         :telephone,
         :website,
         :options,
-        :users,
         :logo_url
       ]
     end
@@ -24,7 +23,17 @@ module Birbl
 
     def initialize(attributes = {}, parent = nil)
       @activities = []
+      @users      = []
+
+      user_ids = attributes['users']
+      attributes.delete('users')
       super attributes, parent
+
+      unless user_ids.nil?
+        user_ids.each do |user_data|
+          @users<< Birbl::User.find(user_data['id'])
+        end
+      end
     end
 
     # Find a partner by it's email address
@@ -49,6 +58,10 @@ module Birbl
     def activities
       return @activities unless @activities.empty?
       children('activities')
+    end
+
+    def users
+      @users
     end
 
     # Add an activity to this partner from the given data.
