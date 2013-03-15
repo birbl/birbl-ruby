@@ -22,6 +22,7 @@ module Birbl
 
     def initialize(attributes = {}, parent = nil)
       @reservations = []
+      @partners     = []
       super attributes, parent
     end
 
@@ -30,14 +31,11 @@ module Birbl
     end
 
     def reservations
-      return @reservations unless @reservations.empty?
+      children('reservations')
+    end
 
-      data = client.get("#{ path }/reservations")
-      data.each do |item|
-        @reservations<< Birbl::Reservation.find(item['id'])
-      end
-
-      @reservations
+    def partners
+      children('partners')
     end
 
     def writable_attributes
