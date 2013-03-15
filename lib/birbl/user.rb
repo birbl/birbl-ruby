@@ -1,3 +1,5 @@
+require 'cgi'
+
 module Birbl
   class User < Birbl::Resource
 
@@ -43,7 +45,7 @@ module Birbl
     end
 
     def self.find_by_email(email)
-      attributes = client.get("users/show_by_email/#{ email.sub('.', '+') }")
+      attributes = client.get("users/show_by_email/#{ CGI.escape(email.sub('.', '+')) }")
       attributes.empty? ? nil : new(attributes)
     end
 
