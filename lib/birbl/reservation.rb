@@ -18,6 +18,7 @@ module Birbl
 
     def initialize(attributes = {}, parent = nil)
       @participations  = []
+      @user = nil
 
       # if called from Birbl::Resource.find, attributes has data from the server
       if attributes.has_key?(:reservation)
@@ -33,6 +34,10 @@ module Birbl
       if occasion.nil? && !occasion_id.nil?
         @occasion = Birbl::Occasion.find(occasion_id)
       end
+
+      if user_id
+        @user = Birbl::User.find(user_id)
+      end
     end
 
     def occasion=(occasion)
@@ -41,6 +46,10 @@ module Birbl
 
     def occasion
       @occasion
+    end
+
+    def user
+      @user
     end
 
     def participations
