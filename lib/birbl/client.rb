@@ -58,7 +58,7 @@ module Birbl
     end
 
     def json_data(data)
-      "data=" + JSON.generate(data)
+      JSON.generate(data)
     end
 
     def query_server(uri, data = [], method = 'get', pagination = nil)
@@ -71,9 +71,9 @@ module Birbl
         when 'get'
           response = RestClient.get(url + uri, :BIRBL_KEY => @api_key)
         when 'post'
-          response = RestClient.post(url + uri, json_data(data), :BIRBL_KEY => @api_key)
+          response = RestClient.post(url + uri, {:data => json_data(data)}, :BIRBL_KEY => @api_key)
         when 'put'
-          response = RestClient.put(url + uri, json_data(data), :BIRBL_KEY => @api_key)
+          response = RestClient.put(url + uri, {:data => json_data(data)}, :BIRBL_KEY => @api_key)
         when 'delete'
           response = RestClient.delete(url + uri, :BIRBL_KEY => @api_key)
         end

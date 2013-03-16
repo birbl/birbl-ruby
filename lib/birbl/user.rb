@@ -8,7 +8,6 @@ module Birbl
         :username,
         :email,
         :active,
-        :partner_id,
         :options,
         :reservations
         ]

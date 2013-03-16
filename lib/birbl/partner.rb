@@ -12,7 +12,8 @@ module Birbl
         :telephone,
         :website,
         :options,
-        :logo_url
+        :logo_url,
+        :users
       ]
     end
 
@@ -31,9 +32,20 @@ module Birbl
 
       unless user_ids.nil?
         user_ids.each do |user_data|
-          @users<< Birbl::User.find(user_data['id'])
+          @users<< Birbl::User.new(user_data)
         end
       end
+    end
+
+    # revert users back to ids
+    def save
+      _users = @users.clone
+      _users.each{ |u|
+        users<< {:id => u.id}
+      }
+      super
+
+      @users = _users
     end
 
     # Find a partner by it's email address
@@ -60,10 +72,6 @@ module Birbl
       children('activities')
     end
 
-    def users
-      @users
-    end
-
     # Add an activity to this partner from the given data.
     #
     # If the activity does not already have an id, it will automatically be sent to the API
@@ -71,5 +79,10 @@ module Birbl
     def add_activity(data)
       add_child('activity', data)
     end
+
+    def users
+      @users
+    end
+
   end
 end
