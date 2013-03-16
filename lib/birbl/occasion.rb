@@ -41,7 +41,7 @@ module Birbl
       if @reservations.empty?
         data = Birbl::Client.instance.get("#{ path }/reservations")
         data.each do |reservation_data|
-          @reservations<< Birbl::Reservation.new(reservation_data)
+          @reservations<< Birbl::Reservation.find(reservation_data['id'])
         end
       end
 
