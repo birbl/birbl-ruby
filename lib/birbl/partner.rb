@@ -24,28 +24,8 @@ module Birbl
 
     def initialize(attributes = {}, parent = nil)
       @activities = []
-      @users      = []
 
-      user_ids = attributes['users']
-      attributes.delete('users')
       super attributes, parent
-
-      unless user_ids.nil?
-        user_ids.each do |user_data|
-          @users<< Birbl::User.new(user_data)
-        end
-      end
-    end
-
-    # revert users back to ids
-    def save
-      _users = @users.clone
-      _users.each{ |u|
-        users<< {:id => u.id}
-      }
-      super
-
-      @users = _users
     end
 
     # Find a partner by it's email address
@@ -78,10 +58,6 @@ module Birbl
     # when this function is called
     def add_activity(data)
       add_child('activity', data)
-    end
-
-    def users
-      @users
     end
 
   end
