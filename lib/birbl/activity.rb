@@ -21,6 +21,7 @@ module Birbl
         :warnings,
         :active,
         :cancellation_policy,
+        :t_and_c,
         :digital_asset_urls
       ]
     end
@@ -115,6 +116,17 @@ module Birbl
 
     def post_path
       "#{ partner.path }/activities"
+    end
+
+    def writable_attributes
+      writable = {}
+      attributes.keys.each do |key|
+        next if [:partner_id, :warnings].include?(key.to_sym)
+
+        writable[key] = attributes[key]
+      end
+
+      writable
     end
 
     private
