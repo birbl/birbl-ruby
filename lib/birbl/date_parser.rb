@@ -14,10 +14,16 @@ module Birbl
 
     private
 
+    ############################################################################
+    #
+    # Parse a pipe delimited string of dates
+    #
+    #
     def parse_dates(date_string)
       dates = []
-      if date_string =~ /,/
-        date_string.split(/\s*,\s*/).each { |date|
+
+      if date_string =~ /\|/
+        date_string.split(/\s*\|\s*/).each { |date|
           dates<< parse_dates(date)
         }
       elsif date_string =~ /(.+?)RRULE:(.+)/
