@@ -85,9 +85,12 @@ module Birbl
       # hopefully the :dates parameter can eventually be moved to core.  For now it's handled here
       safe_dates = parse_dates(dates)
 
-      data = client.post("#{ path }/occasions", safe_dates)
-      data.each do |occasion_data|
-        occasions<< add_child('occasion', occasion_data)
+      # server may timeout if there is too much data here, so send 50 at time
+      safe_dates.each_slice(50) do |date_chunk|
+        data = client.post("#{ path }/occasions", date_chunk)
+        data.each do |occasion_data|
+          occasions<< add_child('occasion', occasion_data)
+        end
       end
 
       occasions
