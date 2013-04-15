@@ -6,8 +6,31 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
-dates = "20130415T100000ZP0Y0M0DT2H0MRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA;UNTIL=20131031T120000Z|20130415T113000ZP0Y0M0DT2H0MRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA;UNTIL=20131031T133000Z|20130415T130000ZP0Y0M0DT2H0MRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA;UNTIL=20131031T150000Z|20130415T143000ZP0Y0M0DT2H0MRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA;UNTIL=20131031T163000Z|20130415T160000ZP0Y0M0DT2H0MRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA;UNTIL=20131031T183000Z"
+cities = Birbl::Address.search_cities('New Y')
+puts cities.to_yaml
 
-dp = Birbl::DateParser.new(dates)
+exit
+user_data = {
+  :active    => true,
+  :email     => 'info3@example.com',
+  :username  => 'test',
+  :options   => {},
+  :address => {
+    :street1      => '129 Baggot St Lower',
+    :street2      => 'c/o Birbl',
+    :city         => 'Dublin',
+    :region       => 'Dublin Co.',
+    :country      => 'Ireland',
+    :postal_code  => 'Dublin 2',
 
-puts dp.dates
+    :geo_ip_city_id     => nil,
+    :geo_ip_country_id  => nil,
+    :geo_ip_region_id   => nil,
+
+    :lat    => nil,
+    :lon    => nil
+  }
+}
+
+u = Birbl::User.new(user_data)
+u.save

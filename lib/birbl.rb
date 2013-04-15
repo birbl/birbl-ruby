@@ -16,4 +16,5 @@ module Birbl
   require 'birbl/reservation'
   require 'birbl/participation'
   require 'birbl/user'
+  require 'birbl/address'
 end

@@ -9,7 +9,8 @@ module Birbl
         :email,
         :active,
         :options,
-        :reservations
+        :reservations,
+        :address
         ]
     end
 
@@ -22,6 +23,8 @@ module Birbl
     def initialize(attributes = {}, parent = nil)
       @reservations = []
       @partners     = []
+      @address      = nil
+
       super attributes, parent
     end
 
@@ -38,7 +41,7 @@ module Birbl
     end
 
     def writable_attributes
-      attributes.select { |k,v| ['username', 'active', 'email'].include?(k.to_s) }
+      attributes.select { |k,v| ['username', 'active', 'email', 'options', 'address'].include?(k.to_s) }
     end
 
     def self.find_by_email(email)

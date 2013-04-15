@@ -75,6 +75,10 @@ module Birbl
       end
     end
 
+    def address=(data)
+      @address = Birbl::Address.new(data)
+    end
+
     def path
       self.class.collection_path + "/#{id}"
     end
