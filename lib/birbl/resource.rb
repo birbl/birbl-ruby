@@ -75,6 +75,10 @@ module Birbl
       end
     end
 
+    def address
+      @address
+    end
+
     def address=(data)
       @address = Birbl::Address.new(data)
     end
@@ -95,7 +99,13 @@ module Birbl
     end
 
     def as_json
-      writable_attributes.symbolize_keys
+      attr = writable_attributes.symbolize_keys
+
+      if defined?(@address)
+        attr['address'] = @address.as_json
+      end
+
+      attr
     end
 
     def writable_attributes
