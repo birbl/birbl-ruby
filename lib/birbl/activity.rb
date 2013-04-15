@@ -22,7 +22,8 @@ module Birbl
         :active,
         :cancellation_policy,
         :t_and_c,
-        :digital_asset_urls
+        :digital_asset_urls,
+        :address
       ]
     end
 

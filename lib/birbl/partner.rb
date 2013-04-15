@@ -13,7 +13,8 @@ module Birbl
         :website,
         :options,
         :logo_url,
-        :users
+        :users,
+        :address
       ]
     end
 
