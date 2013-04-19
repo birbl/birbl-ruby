@@ -6,8 +6,7 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
-u = Birbl::User.find(1)
-puts u.to_yaml
 
-#u.address.country = 'Ireland'
-#u.save
+
+a = Birbl::Activity.find(1)
+puts a.address.to_yaml
