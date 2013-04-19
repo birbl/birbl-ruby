@@ -67,6 +67,20 @@ module Birbl
       nil
     end
 
+    def occasions_by_date(data, strict = false)
+      d = DateTime.parse(date)
+
+      matches = []
+      occasions.each do |occasion|
+        test1 = strict ? occasion.begin_datetime : occasion.begin_datetime.strftime('%Y%m%d')
+        test2 = strict ? d : d.strftime('%Y%m%d')
+
+        matches<< occasion if test1 == test2
+      end
+
+      matches
+    end
+
     def occasions
       children('occasions')
     end
