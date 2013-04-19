@@ -23,6 +23,9 @@ module Birbl
         :cancellation_policy,
         :t_and_c,
         :digital_asset_urls,
+        :highlights,
+        :what_you_get,
+        :faq
       ]
     end
 
