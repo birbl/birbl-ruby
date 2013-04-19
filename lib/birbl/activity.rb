@@ -25,7 +25,8 @@ module Birbl
         :digital_asset_urls,
         :highlights,
         :what_you_get,
-        :faq
+        :faq,
+        :interest_list
       ]
     end
 
