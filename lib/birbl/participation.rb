@@ -8,7 +8,8 @@ module Birbl
         :state,
         :lock_timeout,
         :token,
-        :options
+        :options,
+        :cancelled_on
       ]
     end
 

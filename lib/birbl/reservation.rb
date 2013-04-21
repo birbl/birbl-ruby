@@ -10,7 +10,8 @@ module Birbl
         :user_id,
         :state,
         :paid,
-        :payment_data
+        :payment_data,
+        :amount_due
       ]
     end
 
@@ -70,6 +71,17 @@ module Birbl
       end
 
       client.put(path, {:cancel => participation_ids})
+    end
+
+    def writable_attributes
+      writable = {}
+      attributes.keys.each do |key|
+        next if [:amount_due].include?(key.to_sym)
+
+        writable[key] = attributes[key]
+      end
+
+      writable
     end
 
     def self.payment_due

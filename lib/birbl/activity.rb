@@ -67,7 +67,7 @@ module Birbl
       nil
     end
 
-    def occasions_by_date(data, strict = false)
+    def occasions_by_date(date, strict = false)
       d = DateTime.parse(date)
 
       matches = []
