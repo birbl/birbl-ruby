@@ -40,7 +40,10 @@ module Birbl
     validates_presence_of :maximum_capacity
 
     def initialize(attributes = {}, partner = nil)
-      @occasions = []
+      @occasions    = []
+      @price_points = []
+      @limits       = {}
+
       super attributes, partner
 
       if partner.nil? && !partner_id.nil?
@@ -64,11 +67,22 @@ module Birbl
       children('occasions')
     end
 
-    # Find active activities
-    def self.active
-      data = client.get('/activities/show_active')
+    def price_points
+      if @price_points.empty?
+        data = client.get "#{ path }/prices"
 
-      data.collect { |a_data| Birbl::Activity.new(a_data) }
+        @limits = data[:limits]
+
+        data[:price_points].each do |price|
+          @price_points<< Birbl::PricePoint.new(price, self)
+        end
+      end
+
+      @price_points
+    end
+
+    def limits
+      @limits
     end
 
     # Reserve an activity on the given date, at the given price point for the given amount
@@ -119,6 +133,13 @@ module Birbl
     end
 
 
+    # Find active activities
+    def self.active
+      data = client.get('/activities/show_active')
+
+      data.collect { |a_data| Birbl::Activity.new(a_data) }
+    end
+
     # OBSOLETE???
 
     # Add one or more occasions, one for each date in the passed array.
@@ -164,12 +185,12 @@ module Birbl
       matches
     end
 
-    # END OBSOLETE
-
     private
 
     def parse_dates(date_string)
       DateParser.new(date_string).dates
     end
+
+    # END OBSOLETE
   end
 end
