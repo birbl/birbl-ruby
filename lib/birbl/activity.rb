@@ -27,7 +27,8 @@ module Birbl
         :what_you_get,
         :faq,
         :interest_list,
-        :dates
+        :dates,
+        :ical
       ]
     end
 
@@ -118,7 +119,7 @@ module Birbl
     end
 
 
-    # OBSOLETE
+    # OBSOLETE???
 
     # Add one or more occasions, one for each date in the passed array.
     # Returns an array of new occasion objects
