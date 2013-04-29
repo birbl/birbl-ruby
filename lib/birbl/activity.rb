@@ -111,7 +111,7 @@ module Birbl
     def occasion_by_date(date)
       date = DateTime.parse(date) unless date.class == DateTime or date.class == Time
       occasions.each do |occasion|
-        return occasion if occasion.begin_datetime == d
+        return occasion if occasion.begin_datetime == date
       end
 
       nil
