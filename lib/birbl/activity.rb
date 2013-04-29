@@ -26,7 +26,8 @@ module Birbl
         :highlights,
         :what_you_get,
         :faq,
-        :interest_list
+        :interest_list,
+        :dates
       ]
     end
 
@@ -58,32 +59,57 @@ module Birbl
       child('occasion', id)
     end
 
-    def occasion_by_date(date)
-      d = DateTime.parse(date)
-      occasions.each do |occasion|
-        return occasion if occasion.begin_datetime == d
-      end
-
-      nil
-    end
-
-    def occasions_by_date(date, strict = false)
-      d = DateTime.parse(date)
-
-      matches = []
-      occasions.each do |occasion|
-        test1 = strict ? occasion.begin_datetime : occasion.begin_datetime.strftime('%Y%m%d')
-        test2 = strict ? d : d.strftime('%Y%m%d')
-
-        matches<< occasion if test1 == test2
-      end
-
-      matches
-    end
-
     def occasions
       children('occasions')
     end
+
+    # Find active activities
+    def self.active
+      data = client.get('/activities/show_active')
+
+      data.collect { |a_data| Birbl::Activity.new(a_data) }
+    end
+
+    # Reserve an activity on the given date, at the given price point for the given amount
+    # of people.  The reservation will be associated with the given user.  Price defaults
+    # to the current going price
+    def reserve(date, price = nil, count = 1, user_id = nil)
+      data = client.post path + '/reserve',
+        :datetime     => date,
+        :price_point  => price,
+        :quantity     => count,
+        :user_id      => user_id
+
+
+      reservation = Birbl::Reservation.new(data[:reservation])
+      data[:participations].each do |participation|
+        reservation.add_participation(participation)
+      end
+
+      reservation
+    end
+
+    def path
+      "#{ post_path }/#{ id }"
+    end
+
+    def post_path
+      "#{ partner.path }/activities"
+    end
+
+    def writable_attributes
+      writable = {}
+      attributes.keys.each do |key|
+        next if [:partner_id, :warnings].include?(key.to_sym)
+
+        writable[key] = attributes[key]
+      end
+
+      writable
+    end
+
+
+    # OBSOLETE
 
     # Add one or more occasions, one for each date in the passed array.
     # Returns an array of new occasion objects
@@ -114,41 +140,30 @@ module Birbl
       occasions
     end
 
-    # Find active activities
-    def self.active
-      data = client.get('/activities/show_active')
-
-      data.collect { |a_data| Birbl::Activity.new(a_data) }
-    end
-
-    # Reserve an activity on the given date, at the given price point for the given amount
-    # of people.  The reservation will be associated with the given user.  Price defaults
-    # to the current going price
-    def reserve(date, price = nil, count = 1, user_id = nil)
-      occasion = occasion_by_date(date)
-      raise "No occasion found for #{ date }" if occasion.nil?
-
-      occasion.reserve(price, count, user_id)
-    end
-
-    def path
-      "#{ post_path }/#{ id }"
-    end
-
-    def post_path
-      "#{ partner.path }/activities"
-    end
-
-    def writable_attributes
-      writable = {}
-      attributes.keys.each do |key|
-        next if [:partner_id, :warnings].include?(key.to_sym)
-
-        writable[key] = attributes[key]
+    def occasion_by_date(date)
+      d = DateTime.parse(date)
+      occasions.each do |occasion|
+        return occasion if occasion.begin_datetime == d
       end
 
-      writable
+      nil
     end
+
+    def occasions_by_date(date, strict = false)
+      d = DateTime.parse(date)
+
+      matches = []
+      occasions.each do |occasion|
+        test1 = strict ? occasion.begin_datetime : occasion.begin_datetime.strftime('%Y%m%d')
+        test2 = strict ? d : d.strftime('%Y%m%d')
+
+        matches<< occasion if test1 == test2
+      end
+
+      matches
+    end
+
+    # END OBSOLETE
 
     private
 
