@@ -108,6 +108,15 @@ module Birbl
       writable
     end
 
+    def occasion_by_date(date)
+      date = DateTime.parse(date) unless date.class == DateTime or date.class == Time
+      occasions.each do |occasion|
+        return occasion if occasion.begin_datetime == d
+      end
+
+      nil
+    end
+
 
     # OBSOLETE
 
@@ -138,15 +147,6 @@ module Birbl
       end
 
       occasions
-    end
-
-    def occasion_by_date(date)
-      d = DateTime.parse(date)
-      occasions.each do |occasion|
-        return occasion if occasion.begin_datetime == d
-      end
-
-      nil
     end
 
     def occasions_by_date(date, strict = false)
