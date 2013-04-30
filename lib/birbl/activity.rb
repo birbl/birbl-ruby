@@ -115,7 +115,7 @@ module Birbl
     def writable_attributes
       writable = {}
       attributes.keys.each do |key|
-        next if [:partner_id, :warnings].include?(key.to_sym)
+        next if [:partner_id, :warnings, :id].include?(key.to_sym)
 
         writable[key] = attributes[key]
       end
