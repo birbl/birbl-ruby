@@ -27,7 +27,6 @@ module Birbl
         :what_you_get,
         :faq,
         :interest_list,
-        :dates,
         :ical
       ]
     end
