@@ -34,10 +34,13 @@ module Birbl
 
       super attributes, parent
 
-      [:partner_review, :partner_press, :partner_award].each do |item|
-        unless attributes[item].nil?
-          attributes[item].each do |data|
-            add_child(item.to_s, data, false)
+      %w(review award press).each do |item|
+        key = "partner_#{ item.pluralize }"
+
+        unless attributes[key].nil?
+          attributes[key].each do |data|
+            child_name = "partner_#{ item }"
+            add_child(child_name, data, false)
           end
         end
       end
