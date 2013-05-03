@@ -8,4 +8,4 @@ Birbl::Client.instance.use_sandbox = true
 
 p = Birbl::Partner.find(1)
 
-puts p.activities[0].to_yaml
+puts p.qualifications.class.to_s

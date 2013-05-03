@@ -71,6 +71,14 @@ module Birbl
       @partner_reviews
     end
 
+    def partner_awards
+      @partner_awards
+    end
+
+    def partner_presses
+      @partner_presses
+    end
+
     # Add a partner review to this partner from the given data.
     #
     # Unlike add_activity, this will not automatically create the review on the API.
