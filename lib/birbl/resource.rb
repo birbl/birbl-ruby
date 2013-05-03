@@ -146,7 +146,7 @@ module Birbl
         end
 
       add_to_children(resource, object)
-      attributes[resource.pluralize]<< data
+      attributes[resource.pluralize]<< data unless attributes[resource.pluralize].nil?
 
       object
     end
