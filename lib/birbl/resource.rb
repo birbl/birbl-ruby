@@ -130,22 +130,23 @@ module Birbl
       instance_variable_get("@#{ resource }")
     end
 
-    # Add an activity to this partner from the given data.
+    # Add a child resource to this resource from the given data.
     #
-    # If the activity does not already have an id, it will automatically be sent to the API
-    # when this function is called
-    def add_child(resource, data)
+    # If the child resource does not already have an id and autocreate is true,
+    # it will automatically be sent to the API for creatiopn when this function is called
+    def add_child(resource, data, autocreate = true)
       resource_model = "Birbl::#{ resource.camelize}".constantize
       parent_name = self.class.resource_name
 
       object =
-        if data['id'].nil?
+        if autocreate && data['id'].nil?
           resource_model.create(data, self)
         else
           resource_model.new(data, self)
         end
 
       add_to_children(resource, object)
+      attributes[resource.pluralize]<< data
 
       object
     end

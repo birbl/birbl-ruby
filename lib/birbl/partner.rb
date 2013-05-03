@@ -13,7 +13,11 @@ module Birbl
         :website,
         :options,
         :logo_url,
-        :users
+        :users,
+        :qualifications,
+        :partner_reviews,
+        :partner_awards,
+        :partner_presses
       ]
     end
 
@@ -23,9 +27,20 @@ module Birbl
     validates_presence_of :email
 
     def initialize(attributes = {}, parent = nil)
-      @activities = []
+      @activities       = []
+      @partner_reviews  = []
+      @partner_presses  = []
+      @partner_awards   = []
 
       super attributes, parent
+
+      [:partner_review, :partner_press, :partner_award].each do |item|
+        unless attributes[item].nil?
+          attributes[item].each do |data|
+            add_child(item.to_s, data, false)
+          end
+        end
+      end
     end
 
     # Find a partner by it's email address
@@ -50,6 +65,34 @@ module Birbl
     def activities
       return @activities unless @activities.empty?
       children('activities')
+    end
+
+    def partner_reviews
+      @partner_reviews
+    end
+
+    # Add a partner review to this partner from the given data.
+    #
+    # Unlike add_activity, this will not automatically create the review on the API.
+    # Instead, the review is created once the partner instance is saved.
+    def add_partner_review(data)
+      add_child('partner_review', data, false)
+    end
+
+    # Add a partner press item to this partner from the given data.
+    #
+    # Unlike add_activity, this will not automatically create the review on the API.
+    # Instead, the review is created once the partner instance is saved.
+    def add_partner_press(data)
+      add_child('partner_press', data, false)
+    end
+
+    # Add a partner review to this partner from the given data.
+    #
+    # Unlike add_activity, this will not automatically create the review on the API.
+    # Instead, the review is created once the partner instance is saved.
+    def add_partner_award(data)
+      add_child('partner_award', data, false)
     end
 
     # Add an activity to this partner from the given data.
