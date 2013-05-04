@@ -98,6 +98,10 @@ module Birbl
       true
     end
 
+    def delete
+      client.delete(path)
+    end
+
     def as_json
       attr = writable_attributes.symbolize_keys
 

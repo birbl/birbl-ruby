@@ -33,17 +33,6 @@ module Birbl
       @partner_awards   = []
 
       super attributes, parent
-
-      %w(review award press).each do |item|
-        key = "partner_#{ item.pluralize }"
-
-        unless attributes[key].nil?
-          attributes[key].each do |data|
-            child_name = "partner_#{ item }"
-            add_child(child_name, data, false)
-          end
-        end
-      end
     end
 
     # Find a partner by it's email address
@@ -66,44 +55,46 @@ module Birbl
     #
     # They will be loaded from the API the first time they are requested
     def activities
-      return @activities unless @activities.empty?
       children('activities')
     end
 
+    def partner_review(id)
+      child('partner_review', id)
+    end
+
     def partner_reviews
-      @partner_reviews
+      children('partner_reviews')
+    end
+
+    def partner_award(id)
+      child('partner_award', id)
     end
 
     def partner_awards
-      @partner_awards
+      children('partner_awards')
+    end
+
+    def partner_press(id)
+      child('partner_press', id)
     end
 
     def partner_presses
-      @partner_presses
+      children('partner_presses')
     end
 
     # Add a partner review to this partner from the given data.
-    #
-    # Unlike add_activity, this will not automatically create the review on the API.
-    # Instead, the review is created once the partner instance is saved.
     def add_partner_review(data)
-      add_child('partner_review', data, false)
+      add_child('partner_review', data)
     end
 
     # Add a partner press item to this partner from the given data.
-    #
-    # Unlike add_activity, this will not automatically create the review on the API.
-    # Instead, the review is created once the partner instance is saved.
     def add_partner_press(data)
-      add_child('partner_press', data, false)
+      add_child('partner_press', data)
     end
 
     # Add a partner review to this partner from the given data.
-    #
-    # Unlike add_activity, this will not automatically create the review on the API.
-    # Instead, the review is created once the partner instance is saved.
     def add_partner_award(data)
-      add_child('partner_award', data, false)
+      add_child('partner_award', data)
     end
 
     # Add an activity to this partner from the given data.

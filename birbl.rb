@@ -6,6 +6,10 @@ Birbl::Client.new('development')
 Birbl::Client.instance.dev_url = 'http://localhost:8080'
 Birbl::Client.instance.use_sandbox = true
 
-p = Birbl::Partner.find(2)
+p = Birbl::Partner.find(1)
 
-puts p.to_yaml
+puts "count: #{ p.partner_awards.count }"
+p.partner_awards.last.delete
+
+p = Birbl::Partner.find(1)
+puts "count: #{ p.partner_awards.count }"
