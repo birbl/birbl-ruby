@@ -131,11 +131,14 @@ module Birbl
       nil
     end
 
-
     # Find active activities
     def self.active
-      data = client.get('/activities/show_active')
+      self.search
+    end
 
+    # Search activities
+    def self.search(params)
+      data = client.get('/activities/search', params)
       data.collect { |a_data| Birbl::Activity.new(a_data) }
     end
 

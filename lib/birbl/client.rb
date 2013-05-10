@@ -69,6 +69,15 @@ module Birbl
       begin
         case method
         when 'get'
+          unless data.empty?
+            params = []
+            data.each do |k,v|
+              params<< "#{ k }=#{ v }"
+            end
+
+            uri<< "?" + params.join('&')
+          end
+
           response = RestClient.get(url + uri, :BIRBL_KEY => @api_key)
         when 'post'
           response = RestClient.post(url + uri, {:data => json_data(data)}, :BIRBL_KEY => @api_key)
