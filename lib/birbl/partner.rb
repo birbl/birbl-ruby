@@ -17,7 +17,8 @@ module Birbl
         :qualifications,
         :partner_reviews,
         :partner_awards,
-        :partner_presses
+        :partner_presses,
+        :social_links
       ]
     end
 
