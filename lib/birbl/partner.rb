@@ -10,7 +10,7 @@ module Birbl
         :description,
         :email,
         :telephone,
-        :website,
+        :websites,
         :options,
         :logo_url,
         :users,
