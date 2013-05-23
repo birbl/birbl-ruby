@@ -28,8 +28,7 @@ module Birbl
         :faq,
         :interest_list,
         :ical,
-        :extras,
-        :addresses
+        :extras
       ]
     end
 
@@ -42,6 +41,7 @@ module Birbl
 
     def initialize(attributes = {}, partner = nil)
       @occasions    = []
+      @addresses    = []
       @price_points = []
       @limits       = {}
 
@@ -66,6 +66,33 @@ module Birbl
 
     def occasions
       children('occasions')
+    end
+
+    def occasion_by_date(date)
+      date = DateTime.parse(date) unless date.class == DateTime or date.class == Time
+      occasions.each do |occasion|
+        return occasion if occasion.begin_datetime == date
+      end
+
+      nil
+    end
+
+    def addresses
+      @addresses
+    end
+
+    def addresses=(addresses)
+      @addresses = []
+
+      addresses.each do |address_data|
+        if address_data.class == Birbl::Address
+          @addresses<< address_data
+        else
+          @addresses<< Birbl::Address.new(address_data)
+        end
+      end
+
+      @addresses
     end
 
     def price_points
@@ -121,16 +148,16 @@ module Birbl
         writable[key] = attributes[key]
       end
 
-      writable
-    end
+      writable[:addresses] = []
+      @addresses.each do |address|
+        unless address.class == Birbl::Address
+          address = Birbl::Address.new(address)
+        end
 
-    def occasion_by_date(date)
-      date = DateTime.parse(date) unless date.class == DateTime or date.class == Time
-      occasions.each do |occasion|
-        return occasion if occasion.begin_datetime == date
+        writable[:addresses]<< address.writable_attributes
       end
 
-      nil
+      writable
     end
 
     # Find active activities
