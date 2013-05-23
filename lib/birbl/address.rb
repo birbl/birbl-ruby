@@ -15,7 +15,8 @@ module Birbl
           :geo_ip_country_id,
           :geo_ip_region_id,
           :lat,
-          :lon
+          :lon,
+          :index
         ]
     end
 

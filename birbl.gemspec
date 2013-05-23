@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'birbl'
-  s.version     = '0.0.70'
-  s.date        = '2013-05-22'
+  s.version     = '0.0.71'
+  s.date        = '2013-05-23'
   s.summary     = "A Ruby implementation of the Birbl API"
   s.description = "Use the Birbl API from your own Ruby program"
   s.authors     = ["Aaron Craig"]
