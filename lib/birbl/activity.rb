@@ -28,7 +28,8 @@ module Birbl
         :faq,
         :interest_list,
         :ical,
-        :extras
+        :extras,
+        :publish_on
       ]
     end
 
