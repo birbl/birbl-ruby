@@ -106,5 +106,11 @@ module Birbl
       add_child('activity', data)
     end
 
+    # Search activities
+    def self.search(params)
+      data = client.get('/partners/search', params)
+      data.collect { |p_data| Birbl::Partner.new(p_data) }
+    end
+
   end
 end
